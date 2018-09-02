@@ -1,0 +1,32 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven {
+            url 'https://cache-redirector.jetbrains.com/maven-central'
+        }
+        maven {
+            url "https://dl.bintray.com/jetbrains/kotlin-native-dependencies"
+        }
+        maven {
+            url "http://dl.bintray.com/kotlin/kotlin-eap"
+        }
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-native-gradle-plugin:0.8"
+    }
+}
+
+apply plugin: 'konan'
+
+group 'de.dbaelz'
+version '0.0.1'
+
+konan.targets = ['linux']
+
+konanArtifacts {
+    program('example') {
+        srcDir 'src/example/kotlin/'
+    }
+    library('Konclik')
+}
