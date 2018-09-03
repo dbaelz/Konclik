@@ -10,13 +10,16 @@ class CommandBuilder {
     private var arguments = mutableListOf<Parameter.Argument>()
     private var options = mutableListOf<Parameter.Option>()
 
+    var action: ((Command) -> Unit)? = null
+
     fun parameters(block: ParametersBuilder.() -> Unit) {
         val (arguments, options) = ParametersBuilder().apply(block).build()
         this.arguments = arguments
         this.options = options
     }
 
-    fun build(): Command = Command(name, description, arguments, options)
+
+    fun build(): Command = Command(name, description, arguments, options, action)
 }
 
 @KonclikDsl

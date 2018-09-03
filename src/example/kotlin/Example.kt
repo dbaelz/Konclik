@@ -12,25 +12,22 @@ fun main(args: Array<String>) {
                     Parameter.Option("--uppercase")
             )
         }
+        action = { it ->
+            if (it.options.contains(Parameter.Option("--verbose")))
+                println(it.toString())
 
-    }
+            val user = if (it.arguments.isNotEmpty()) it.arguments[0].value else "world"
 
-    parseAndPrintHelloCommand(helloCommand)
-}
+            "Hello $user!".run {
+                if (it.options.contains(Parameter.Option("--uppercase"))) {
+                    println(this.toUpperCase())
+                } else {
+                    println(this)
+                }
 
-fun parseAndPrintHelloCommand(command: Command) {
-    if (command.name == "hello") {
-        if (command.options.contains(Parameter.Option("--verbose")))
-            println(command.toString())
-
-        val user = if (command.arguments.isNotEmpty()) command.arguments[0].value else "world"
-
-        "Hello $user!".run {
-            if (command.options.contains(Parameter.Option("--uppercase"))) {
-                println(this.toUpperCase())
-            } else {
-                println(this)
             }
         }
     }
+
+    helloCommand.execute()
 }
