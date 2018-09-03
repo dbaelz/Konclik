@@ -6,7 +6,7 @@ fun command(block: CommandBuilder.() -> Unit): Command = CommandBuilder().apply(
 @KonclikDsl
 class CommandBuilder {
     lateinit var name: String
-    var description: String? = ""
+    var description: String = ""
     private var arguments = listOf<Parameter.Argument>()
     private var options = listOf<Parameter.Option>()
 
