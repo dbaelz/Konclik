@@ -5,12 +5,18 @@ fun command(block: CommandBuilder.() -> Unit): Command = CommandBuilder().apply(
 
 @KonclikDsl
 class CommandBuilder {
-    lateinit var name: String
-    var description: String = ""
+    private var metadata: Pair<String, String> = Pair("", "")
     private var arguments = listOf<Parameter.Argument>()
     private var options = listOf<Parameter.Option>()
+    private var action: ((Command) -> Unit)? = null
 
-    var action: ((Command) -> Unit)? = null
+    fun action(block: (Command) -> Unit) {
+        action = block
+    }
+
+    fun metadata(block: MetadataBuilder.() -> Unit) {
+        metadata = MetadataBuilder().apply(block).build()
+    }
 
     fun parameters(block: ParametersBuilder.() -> Unit) {
         val (arguments, options) = ParametersBuilder().apply(block).build()
@@ -19,7 +25,15 @@ class CommandBuilder {
     }
 
 
-    fun build(): Command = Command(name, description, arguments, options, action)
+    fun build(): Command = Command(metadata.first, metadata.second, arguments, options, action)
+}
+
+@KonclikDsl
+class MetadataBuilder {
+    var name: String = ""
+    var description: String = ""
+
+    fun build(): Pair<String, String> = Pair(name, description)
 }
 
 @KonclikDsl

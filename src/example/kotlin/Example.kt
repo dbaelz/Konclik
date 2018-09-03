@@ -3,8 +3,10 @@ fun main(args: Array<String>) {
     println()
 
     command {
-        name = "hello"
-        description = "A simple example which prints 'Hello \$user!'"
+        metadata {
+            name = "hello"
+            description = "A simple example which prints 'Hello \$user!'"
+        }
         parameters {
             arguments = listOf(Parameter.Argument(if (args.isNotEmpty()) args[0] else "Daniel"))
 
@@ -13,7 +15,7 @@ fun main(args: Array<String>) {
                     Parameter.Option("--uppercase")
             )
         }
-        action = { it ->
+        action { it ->
             val user = it.getArgument(0) ?: "world"
 
             "Hello $user!".run {
