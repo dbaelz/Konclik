@@ -14,17 +14,17 @@ fun main(args: Array<String>) {
             )
         }
         action = { it ->
-            val user = if (it.arguments.isNotEmpty()) it.arguments[0].value else "world"
+            val user = it.getArgument(0) ?: "world"
 
             "Hello $user!".run {
-                if (it.options.contains(Parameter.Option("--uppercase"))) {
+                if (it.hasOption("--uppercase")) {
                     println(this.toUpperCase())
                 } else {
                     println(this)
                 }
             }
 
-            if (it.options.contains(Parameter.Option("--verbose"))) {
+            if (it.hasOption("--verbose")) {
                 println()
                 println("Executed Command: $it")
             }

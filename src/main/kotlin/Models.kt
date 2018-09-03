@@ -3,6 +3,14 @@ data class Command(val name: String,
                    val arguments: List<Parameter.Argument> = emptyList(),
                    val options: List<Parameter.Option> = emptyList(),
                    val action: ((Command) -> Unit)? = null) {
+    fun getArgument(index: Int): String? {
+        return arguments.getOrNull(index)?.value
+    }
+
+    fun hasOption(value: String): Boolean {
+        return options.contains(Parameter.Option(value))
+    }
+
     fun execute() {
         action?.invoke(this)
     }
