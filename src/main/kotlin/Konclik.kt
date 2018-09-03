@@ -7,8 +7,8 @@ fun command(block: CommandBuilder.() -> Unit): Command = CommandBuilder().apply(
 class CommandBuilder {
     lateinit var name: String
     var description: String? = ""
-    var arguments = mutableListOf<Parameter.Argument>()
-    var options = mutableListOf<Parameter.Option>()
+    private var arguments = mutableListOf<Parameter.Argument>()
+    private var options = mutableListOf<Parameter.Option>()
 
     fun parameters(block: ParametersBuilder.() -> Unit) {
         val (arguments, options) = ParametersBuilder().apply(block).build()
