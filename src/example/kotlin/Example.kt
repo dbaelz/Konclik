@@ -1,11 +1,12 @@
 fun main(args: Array<String>) {
     println("Konclik: Kotlin/Native Command Line Interface Kit")
+    println()
 
-    val helloCommand = command {
+    command {
         name = "hello"
         description = "A simple example which prints 'Hello \$user!'"
         parameters {
-            arguments = mutableListOf(Parameter.Argument("Daniel"))
+            arguments = mutableListOf(Parameter.Argument(if (args.isNotEmpty()) args[0] else "Daniel"))
 
             options = mutableListOf(
                     Parameter.Option("--verbose"),
@@ -13,9 +14,6 @@ fun main(args: Array<String>) {
             )
         }
         action = { it ->
-            if (it.options.contains(Parameter.Option("--verbose")))
-                println(it.toString())
-
             val user = if (it.arguments.isNotEmpty()) it.arguments[0].value else "world"
 
             "Hello $user!".run {
@@ -24,10 +22,12 @@ fun main(args: Array<String>) {
                 } else {
                     println(this)
                 }
+            }
 
+            if (it.options.contains(Parameter.Option("--verbose"))) {
+                println()
+                println("Executed Command: $it")
             }
         }
-    }
-
-    helloCommand.execute()
+    }.execute()
 }
