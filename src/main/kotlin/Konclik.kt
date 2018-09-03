@@ -7,8 +7,8 @@ fun command(block: CommandBuilder.() -> Unit): Command = CommandBuilder().apply(
 class CommandBuilder {
     lateinit var name: String
     var description: String? = ""
-    private var arguments = mutableListOf<Parameter.Argument>()
-    private var options = mutableListOf<Parameter.Option>()
+    private var arguments = listOf<Parameter.Argument>()
+    private var options = listOf<Parameter.Option>()
 
     var action: ((Command) -> Unit)? = null
 
@@ -24,10 +24,10 @@ class CommandBuilder {
 
 @KonclikDsl
 class ParametersBuilder {
-    var arguments = mutableListOf<Parameter.Argument>()
-    var options = mutableListOf<Parameter.Option>()
+    var arguments = listOf<Parameter.Argument>()
+    var options = listOf<Parameter.Option>()
 
-    fun build(): Pair<MutableList<Parameter.Argument>, MutableList<Parameter.Option>> {
+    fun build(): Pair<List<Parameter.Argument>, List<Parameter.Option>> {
         return Pair(arguments, options)
     }
 }

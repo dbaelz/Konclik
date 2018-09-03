@@ -6,9 +6,9 @@ fun main(args: Array<String>) {
         name = "hello"
         description = "A simple example which prints 'Hello \$user!'"
         parameters {
-            arguments = mutableListOf(Parameter.Argument(if (args.isNotEmpty()) args[0] else "Daniel"))
+            arguments = listOf(Parameter.Argument(if (args.isNotEmpty()) args[0] else "Daniel"))
 
-            options = mutableListOf(
+            options = listOf(
                     Parameter.Option("--verbose"),
                     Parameter.Option("--uppercase")
             )
