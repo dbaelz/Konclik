@@ -1,13 +1,13 @@
 # Konclik: Kotlin/Native Command Line Interface Kit
-Konclik is a library to simply develop a CLI applications with a Kotlin DSL.
-It's based on Kotlin/Native, so it it could work on different platforms.
+Konclik is a library for the development of a CLI application defined by
+a Kotlin DSL. It's based on Kotlin/Native, so it could work on different platforms.
 
 ## Development
 Due it's very (very, very) early development stage, the DSL and the
 multi-platform features are only partially implemented. Please stay tuned.
 
 Currently, Konclik only supports one target: `linux`. More targets will
-be supported in the future. In addition to the Kotlin/Native targets a
+be supported/tested in the future. In addition to the Kotlin/Native targets a
 JAR file for a simple integration with Kotlin/JVM is planned.
 
 Issues, contributions and Kotlin/Native expertise are very welcome.
