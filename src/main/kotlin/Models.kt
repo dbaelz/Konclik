@@ -1,3 +1,7 @@
+data class KonclikApp(val name: String = "",
+                      val description: String = "",
+                      val commands: List<Command> = emptyList())
+
 data class Command(val name: String = "",
                    val description: String = "",
                    val arguments: List<Parameter.Argument> = emptyList(),
@@ -15,7 +19,6 @@ data class Command(val name: String = "",
         action?.invoke(this)
     }
 }
-
 
 sealed class Parameter {
     abstract val value: String

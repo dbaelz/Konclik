@@ -1,7 +1,23 @@
 @DslMarker
 annotation class KonclikDsl
 
-fun command(block: CommandBuilder.() -> Unit): Command = CommandBuilder().apply(block).build()
+fun konclikApp(block: KonclikAppBuilder.() -> Unit): KonclikApp = KonclikAppBuilder().apply(block).build()
+
+@KonclikDsl
+class KonclikAppBuilder {
+    private var metadata: Pair<String, String> = Pair("", "")
+    private var commands = mutableListOf<Command>()
+
+    fun metadata(block: MetadataBuilder.() -> Unit) {
+        metadata = MetadataBuilder().apply(block).build()
+    }
+
+    fun command(block: CommandBuilder.() -> Unit) {
+        commands.add(CommandBuilder().apply(block).build())
+    }
+
+    fun build(): KonclikApp = KonclikApp(metadata.first, metadata.second, commands)
+}
 
 @KonclikDsl
 class CommandBuilder {
