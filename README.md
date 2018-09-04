@@ -8,7 +8,7 @@ multi-platform features are only partially implemented. Please stay tuned.
 
 Currently, Konclik only supports one target: `linux`. More targets will
 be supported/tested in the future. In addition to the Kotlin/Native targets a
-JAR file for a simple integration with Kotlin/JVM is planned.
+JAR file (see jvm submodule) for a simple integration with Kotlin/JVM is planned.
 
 Issues, contributions and Kotlin/Native expertise are very welcome.
 

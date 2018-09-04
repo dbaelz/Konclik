@@ -5,4 +5,5 @@
 .DS_Store
 /build/
 /jvm/build
+/jvm/out
 /native/build

@@ -1,0 +1,29 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm'
+}
+
+group 'de.dbaelz'
+version '0.0.1'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+}
+
+sourceSets {
+    main {
+        kotlin {
+            srcDirs += [ "${project(":native").projectDir}/src/main/kotlin"]
+        }
+    }
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
