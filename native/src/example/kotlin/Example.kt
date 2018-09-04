@@ -33,7 +33,8 @@ fun main(args: Array<String>) {
 
                 if (command.hasOption("--verbose", args)) {
                     println()
-                    println("Executed Command: $command")
+                    println(command)
+                    println(args)
                 }
             }
         }
