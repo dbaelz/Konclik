@@ -1,0 +1,16 @@
+apply plugin: 'konan'
+
+group 'de.dbaelz'
+version '0.0.1'
+
+konan.targets = ['linux']
+
+konanArtifacts {
+    library('konclik')
+    program('example') {
+        srcDir 'src/example/kotlin/'
+        libraries {
+            artifact 'konclik'
+        }
+    }
+}

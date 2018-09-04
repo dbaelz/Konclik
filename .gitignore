@@ -4,3 +4,5 @@
 /.idea/
 .DS_Store
 /build/
+/jvm/build
+/native/build
