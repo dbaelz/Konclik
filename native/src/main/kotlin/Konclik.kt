@@ -46,6 +46,7 @@ class CommandBuilder {
 
 @KonclikDsl
 class MetadataBuilder {
+    // TODO: Other way for required value, non-null value then lateinit. Or Null?
     lateinit var name: String
     var description: String = ""
 

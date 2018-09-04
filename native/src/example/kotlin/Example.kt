@@ -20,20 +20,20 @@ fun main(args: Array<String>) {
                         Parameter.Option("--uppercase")
                 )
             }
-            action { it, args ->
-                val user = it.getArgument(0) ?: "world"
+            action { command, args ->
+                val user = command.getArgument("user", args) ?: "world"
 
                 "Hello $user!".run {
-                    if (it.hasOption("--uppercase")) {
+                    if (command.hasOption("--uppercase", args)) {
                         println(this.toUpperCase())
                     } else {
                         println(this)
                     }
                 }
 
-                if (it.hasOption("--verbose")) {
+                if (command.hasOption("--verbose", args)) {
                     println()
-                    println("Executed Command: $it")
+                    println("Executed Command: $command")
                 }
             }
         }
@@ -48,8 +48,10 @@ fun main(args: Array<String>) {
         }
     }
 
+    // TODO: Just for testing purpose. Should be handled by a args parser
     val argsList = args.toList()
     argsList.firstOrNull()?.let {
+        // TODO: See above. Furthermore, changing the list should be part of an internal evaluation of KonclikApp
         konclikApp.findCommand(it)?.execute(argsList.drop(1))
     }
 }
