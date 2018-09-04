@@ -24,9 +24,9 @@ class CommandBuilder {
     private var metadata: Pair<String, String> = Pair("", "")
     private var arguments = listOf<Parameter.Argument>()
     private var options = listOf<Parameter.Option>()
-    private var action: ((Command) -> Unit)? = null
+    private var action: ((Command, List<String>) -> Unit)? = null
 
-    fun action(block: (Command) -> Unit) {
+    fun action(block: (command: Command, args: List<String>) -> Unit) {
         action = block
     }
 
@@ -46,7 +46,7 @@ class CommandBuilder {
 
 @KonclikDsl
 class MetadataBuilder {
-    var name: String = ""
+    lateinit var name: String
     var description: String = ""
 
     fun build(): Pair<String, String> = Pair(name, description)

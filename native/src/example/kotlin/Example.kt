@@ -13,14 +13,14 @@ fun main(args: Array<String>) {
                 description = "A simple example which prints 'Hello \$user!'"
             }
             parameters {
-                arguments = listOf(Parameter.Argument(if (args.isNotEmpty()) args[0] else "Daniel"))
+                arguments = listOf(Parameter.Argument("user"))
 
                 options = listOf(
                         Parameter.Option("--verbose"),
                         Parameter.Option("--uppercase")
                 )
             }
-            action { it ->
+            action { it, args ->
                 val user = it.getArgument(0) ?: "world"
 
                 "Hello $user!".run {
@@ -39,13 +39,17 @@ fun main(args: Array<String>) {
         }
         command {
             metadata {
-                description = "A command without a name"
+                name = "echo"
             }
-            action {
-                println(it)
+            action { command, args ->
+                println(command)
+                println(args)
             }
         }
     }
 
-    konclikApp.commands.firstOrNull()?.execute()
+    val argsList = args.toList()
+    argsList.firstOrNull()?.let {
+        konclikApp.findCommand(it)?.execute(argsList.drop(1))
+    }
 }
