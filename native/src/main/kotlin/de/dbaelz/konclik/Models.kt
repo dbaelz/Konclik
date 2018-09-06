@@ -1,3 +1,5 @@
+package de.dbaelz.konclik
+
 data class KonclikApp(val name: String = "",
                       val description: String = "",
                       private val commands: List<Command> = emptyList()) {

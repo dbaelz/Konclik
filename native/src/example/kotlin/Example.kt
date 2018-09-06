@@ -1,3 +1,6 @@
+import de.dbaelz.konclik.Parameter
+import de.dbaelz.konclik.konclikApp
+
 fun main(args: Array<String>) {
     println("Konclik: Kotlin/Native Command Line Interface Kit")
     println()

@@ -1,3 +1,5 @@
+package de.dbaelz.konclik
+
 @DslMarker
 annotation class KonclikDsl
 

@@ -8,7 +8,7 @@ konan.targets = ['linux']
 konanArtifacts {
     library('konclik')
     program('example') {
-        srcDir 'src/example/kotlin/'
+        srcDir 'src/example/kotlin'
         libraries {
             artifact 'konclik'
         }
