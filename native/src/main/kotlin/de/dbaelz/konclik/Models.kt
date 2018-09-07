@@ -30,8 +30,8 @@ data class Command(val name: String,
 }
 
 sealed class Parameter {
-    abstract val value: String
+    abstract val name: String
 
-    data class Argument(override val value: String) : Parameter()
-    data class Option(override val value: String) : Parameter()
+    data class Argument(override val name: String) : Parameter()
+    data class Option(override val name: String) : Parameter()
 }
