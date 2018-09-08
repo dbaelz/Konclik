@@ -24,6 +24,8 @@ sealed class Parameter {
     abstract val name: String
 
     data class Argument(override val name: String) : Parameter()
+
+    // TODO: Change default value to "T?" and add valueType?
     data class Option(override val name: String,
                       val argType: ArgType = ArgType.SINGLE_VALUE,
                       val defaultValue: String? = null

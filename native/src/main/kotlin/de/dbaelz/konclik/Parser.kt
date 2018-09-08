@@ -28,14 +28,26 @@ fun parseArgs(command: Command, args: List<String>): ProvidedParameters {
                         try {
                             val optionValue = argsListIterator.next()
                             if (!optionValue.startsWith("-")) {
+                                // Use provided value
                                 providedOptions.put(option.name, optionValue)
+                            } else if (option.defaultValue != null) {
+                                // Next arg is an option and not a value: No value provided, so use the default
+                                providedOptions[option.name] = option.defaultValue
+                                // Move the cursor one backwards so the arg from optionValue is evaluated again
+                                argsListIterator.previous()
                             } else {
-                                // No value provided
+                                // No value provided and no default
                                 // TODO: Handle error
                             }
                         } catch (exception: NoSuchElementException) {
                             // This was the last entry in args: No value was provided
-                            // TODO: Handle error
+                            if (option.defaultValue != null) {
+                                // No value provided, so use the default
+                                providedOptions.put(option.name, option.defaultValue)
+                            } else {
+                                // No value provided and no default
+                                // TODO: Handle error
+                            }
                         }
                     }
                 }
