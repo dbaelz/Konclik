@@ -19,25 +19,26 @@ fun main(args: Array<String>) {
                 arguments = listOf(Parameter.Argument("user"))
 
                 options = listOf(
-                        Parameter.Option("--verbose"),
-                        Parameter.Option("--uppercase")
+                        Parameter.Option("--verbose", Parameter.Option.ArgType.SWITCH),
+                        Parameter.Option("--uppercase", Parameter.Option.ArgType.SWITCH),
+                        Parameter.Option("--times", Parameter.Option.ArgType.SINGLE_VALUE, 1.toString())
                 )
             }
-            action { command, args ->
-                val user = command.getArgument("user", args) ?: "world"
+            action { command, providedParameters ->
+                val user: String = providedParameters.positionalArguments["user"] ?: "world"
 
                 "Hello $user!".run {
-                    if (command.hasOption("--uppercase", args)) {
+                    if (providedParameters.options.containsKey("--uppercase")) {
                         println(this.toUpperCase())
                     } else {
                         println(this)
                     }
                 }
 
-                if (command.hasOption("--verbose", args)) {
+                if (providedParameters.options.containsKey("--verbose")) {
                     println()
                     println(command)
-                    println(args)
+                    println(providedParameters)
                 }
             }
         }
@@ -45,9 +46,9 @@ fun main(args: Array<String>) {
             metadata {
                 name = "echo"
             }
-            action { command, args ->
+            action { command, providedParameters ->
                 println(command)
-                println(args)
+                println(providedParameters)
             }
         }
     }

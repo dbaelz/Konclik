@@ -10,22 +10,13 @@ data class Command(val name: String,
                    val description: String = "",
                    val arguments: List<Parameter.Argument> = emptyList(),
                    val options: List<Parameter.Option> = emptyList(),
-                   val action: ((Command, List<String>) -> Unit)? = null) {
-    fun getArgument(value: String, args: List<String>): String? {
-        // TODO: Improved logic including some args parsing beforehand
-        val argument = args.getOrNull(arguments.indexOf(Parameter.Argument(value)))
-        argument?.let {
-            return if (it.startsWith("--")) null else it
-        }
-        return null
-    }
-
-    fun hasOption(value: String, args: List<String>): Boolean {
-        return options.contains(Parameter.Option(value)) && args.contains(value)
+                   val action: ((Command, ProvidedParameters) -> Unit)? = null) {
+    fun getOptionByName(name: String): Parameter.Option? {
+        return options.find { it.name == name }
     }
 
     fun execute(args: List<String> = emptyList()) {
-        action?.invoke(this, args)
+        action?.invoke(this, parseArgs(this, args))
     }
 }
 
@@ -33,5 +24,17 @@ sealed class Parameter {
     abstract val name: String
 
     data class Argument(override val name: String) : Parameter()
-    data class Option(override val name: String) : Parameter()
+    data class Option(override val name: String,
+                      val argType: ArgType = ArgType.SINGLE_VALUE,
+                      val defaultValue: String? = null
+    ) : Parameter() {
+        enum class ArgType {
+            SWITCH,
+            SINGLE_VALUE
+            // TODO: Add more types like MULTI_VALUE. This may requires rethinking of the Option params
+        }
+    }
 }
+
+data class ProvidedParameters(val positionalArguments: Map<String, String> = mapOf(),
+                              val options: Map<String, String> = mapOf())

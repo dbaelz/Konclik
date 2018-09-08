@@ -26,9 +26,9 @@ class CommandBuilder {
     private var metadata: Pair<String, String> = Pair("", "")
     private var arguments = listOf<Parameter.Argument>()
     private var options = listOf<Parameter.Option>()
-    private var action: ((Command, List<String>) -> Unit)? = null
+    private var action: ((Command, ProvidedParameters) -> Unit)? = null
 
-    fun action(block: (command: Command, args: List<String>) -> Unit) {
+    fun action(block: (command: Command, ProvidedParameters) -> Unit) {
         action = block
     }
 
