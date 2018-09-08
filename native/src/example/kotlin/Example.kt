@@ -27,11 +27,19 @@ fun main(args: Array<String>) {
             action { command, providedParameters ->
                 val user: String = providedParameters.positionalArguments["user"] ?: "world"
 
-                "Hello $user!".run {
-                    if (providedParameters.options.containsKey("--uppercase")) {
-                        println(this.toUpperCase())
-                    } else {
-                        println(this)
+                var text = "Hello $user!"
+
+                if (providedParameters.options.containsKey("--uppercase")) {
+                    text = text.toUpperCase()
+                }
+
+                providedParameters.options["--times"]?.let {
+                    var times = 1
+                    try {
+                        times = it.toInt()
+                    } catch (exception: NumberFormatException) {
+                    } finally {
+                        (1..times).forEach { println(text) }
                     }
                 }
 
