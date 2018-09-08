@@ -53,10 +53,5 @@ fun main(args: Array<String>) {
         }
     }
 
-    // TODO: Just for testing purpose. Should be handled by a args parser
-    val argsList = args.toList()
-    argsList.firstOrNull()?.let {
-        // TODO: See above. Furthermore, changing the list should be part of an internal evaluation of KonclikApp
-        konclikApp.findCommand(it)?.execute(argsList.drop(1))
-    }
+    konclikApp.execute(args.toList())
 }
