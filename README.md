@@ -17,6 +17,8 @@ The `native` submodule can be build with the integrated Gradle wrapper.
 * Execute the `build` task to download all dependencies including Kotlin/Native
 and build the project.
 * Use the `run` task to execute the main function of the example project without args
+The `jvm` submodule adds the source code from the native submodule to the classpath.
+It's currently used to just run the example on the JVM. In the future it will also build the JAR.
 
 ## DSL Example/Usage
 The DSL is still WIP and might be changed in the future.
@@ -24,7 +26,7 @@ At the moment, some basic features are supported. The DSL consists of:
 - `konclikApp`: The CLI app
   * The app provides optional `metadata`
   * A app consists of one or more `command` entries
-  * Use `execute()` to parse the provided CLI args and execute the command
+  * Use `run()` to parse the provided CLI args and execute the command with these args
 - `command`:
   * It's identified by its `name`. The `description` is optional
   * `parameters` can be defined for the command. They evaluated in the following order:

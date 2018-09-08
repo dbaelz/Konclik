@@ -5,7 +5,7 @@ data class KonclikApp(val name: String = "",
                       private val commands: List<Command> = emptyList()) {
     private fun findCommand(name: String): Command? = commands.find { it.name == name }
 
-    fun execute(args: List<String> = emptyList()) {
+    fun run(args: List<String> = emptyList()) {
         // TODO: Handle empty args including "no command"? Show some kind of help text?
         args.firstOrNull()?.let {
             // Find the command and hand over the args (without the first arg which was the command name)

@@ -53,5 +53,5 @@ fun main(args: Array<String>) {
         }
     }
 
-    konclikApp.execute(args.toList())
+    konclikApp.run(args.toList())
 }
