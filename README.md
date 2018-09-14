@@ -31,8 +31,8 @@ At the moment, some basic features are supported. The DSL consists of:
   * It's identified by its `name`. The `description` is optional
   * `parameters` can be defined for the command. They evaluated in the following order:
     * `arguments`: Positional arguments, internaly evaluated by the order of the list
-    * `options`: Options are optional and could be switch or single value parameters
-  * The `action` consists of the logic
+    * `options`: Options are optional and could be switch or value parameters
+  * The `action` consists of the logic to execute for the command
 
 For a working example see the CLI application in [Example.kt](https://github.com/dbaelz/Konclik/blob/master/native/src/example/kotlin/Example.kt).
 

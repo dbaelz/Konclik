@@ -19,9 +19,10 @@ fun main(args: Array<String>) {
                 arguments = listOf(Parameter.Argument("user"))
 
                 options = listOf(
-                        Parameter.Option("--verbose", Parameter.Option.ArgType.SWITCH),
-                        Parameter.Option("--uppercase", Parameter.Option.ArgType.SWITCH),
-                        Parameter.Option("--times", Parameter.Option.ArgType.SINGLE_VALUE, 1.toString())
+                        Parameter.Option.Switch("--verbose"),
+                        Parameter.Option.Switch("--uppercase"),
+                        Parameter.Option.Value("--times"),
+                        Parameter.Option.Value("--tags", 3, listOf("#kotlin", "#cli", "#dsl"))
                 )
             }
             action { command, providedParameters ->
@@ -33,15 +34,22 @@ fun main(args: Array<String>) {
                     text = text.toUpperCase()
                 }
 
-                providedParameters.options["--times"]?.let {
+                providedParameters.options["--times"].orEmpty().let {
                     var times = 1
-                    try {
-                        times = it.toInt()
-                    } catch (exception: NumberFormatException) {
-                    } finally {
-                        (1..times).forEach { println(text) }
+                    if (it.isNotEmpty()) {
+                        try {
+                            times = it.firstOrNull()?.toInt() ?: 1
+                        } catch (exception: NumberFormatException) {
+                        }
                     }
+                    (1..times).forEach { println(text) }
                 }
+
+                var tags = ""
+                providedParameters.options["--tags"]?.forEach {
+                    tags += "$it "
+                }
+                if (tags.isNotEmpty()) println(tags)
 
                 if (providedParameters.options.containsKey("--verbose")) {
                     println()

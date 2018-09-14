@@ -12,8 +12,6 @@ data class KonclikApp(val name: String = "",
             findCommand(it)?.execute(args.drop(1))
         }
     }
-
-
 }
 
 data class Command(val name: String,
@@ -34,19 +32,11 @@ sealed class Parameter {
     abstract val name: String
 
     data class Argument(override val name: String) : Parameter()
-
-    // TODO: Change default value to "T?" and add valueType?
-    data class Option(override val name: String,
-                      val argType: ArgType = ArgType.SINGLE_VALUE,
-                      val defaultValue: String? = null
-    ) : Parameter() {
-        enum class ArgType {
-            SWITCH,
-            SINGLE_VALUE
-            // TODO: Add more types like MULTI_VALUE. This may requires rethinking of the Option params
-        }
+    sealed class Option : Parameter() {
+        data class Switch(override val name: String) : Option()
+        data class Value(override val name: String, val numberArgs: Int = 1, val defaults: List<String> = emptyList()) : Option()
     }
 }
 
 data class ProvidedParameters(val positionalArguments: Map<String, String> = mapOf(),
-                              val options: Map<String, String> = mapOf())
+                              val options: Map<String, List<String>> = mapOf())

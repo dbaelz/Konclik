@@ -2,10 +2,10 @@ package de.dbaelz.konclik
 
 fun parseArgs(command: Command, args: List<String>): ProvidedParameters {
     val providedPositionalArguments = mutableMapOf<String, String>()
-    val providedOptions = mutableMapOf<String, String>()
+    val providedOptions = mutableMapOf<String, List<String>>()
 
-    var positionalArgumentCounter = 0
     var positionalArgumentsHandled = false
+    var argsHandledCounter = 0
 
     // TODO: Enhance error handling and detect cases like
     // - To many positional arguments provided
@@ -22,32 +22,31 @@ fun parseArgs(command: Command, args: List<String>): ProvidedParameters {
 
             val option = command.getOptionByName(arg)
             option?.let {
-                when (option.argType) {
-                    Parameter.Option.ArgType.SWITCH -> providedOptions.put(option.name, "")
-                    Parameter.Option.ArgType.SINGLE_VALUE -> {
-                        try {
-                            val optionValue = argsListIterator.next()
-                            if (!optionValue.startsWith("-")) {
-                                // Use provided value
-                                providedOptions.put(option.name, optionValue)
-                            } else if (option.defaultValue != null) {
-                                // Next arg is an option and not a value: No value provided, so use the default
-                                providedOptions[option.name] = option.defaultValue
-                                // Move the cursor one backwards so the arg from optionValue is evaluated again
-                                argsListIterator.previous()
-                            } else {
-                                // No value provided and no default
-                                // TODO: Handle error
+                when (option) {
+                    is Parameter.Option.Switch -> providedOptions.put(option.name, emptyList())
+                    is Parameter.Option.Value -> {
+                        val requiredArgs = option.numberArgs - option.defaults.size
+                        if (enoughArgsProvided(args.listIterator(argsListIterator.nextIndex()), requiredArgs)) {
+                            val values = mutableListOf<String>()
+                            while (argsListIterator.hasNext()) {
+                                val current = argsListIterator.next()
+                                if (current.startsWith("-")) {
+                                    // Next option detected: Move the cursor backwards so the arg is evaluated again
+                                    argsListIterator.previous()
+                                    break
+                                } else {
+                                    values.add(current)
+                                }
                             }
-                        } catch (exception: NoSuchElementException) {
-                            // This was the last entry in args: No value was provided
-                            if (option.defaultValue != null) {
-                                // No value provided, so use the default
-                                providedOptions.put(option.name, option.defaultValue)
-                            } else {
-                                // No value provided and no default
-                                // TODO: Handle error
+                            if (values.size < option.numberArgs) {
+                                // There are less args provided then the option requires
+                                // Simply fill up with the defaults beginning with the first one
+                                values.addAll(option.defaults.subList(0, option.numberArgs - values.size))
                             }
+                            providedOptions.put(option.name, values)
+                        } else {
+                            // Not enough args provided
+                            // TODO: Handle error
                         }
                     }
                 }
@@ -55,10 +54,10 @@ fun parseArgs(command: Command, args: List<String>): ProvidedParameters {
 
         } else if (!positionalArgumentsHandled) {
             // It's a positional argument
-            if (positionalArgumentCounter < command.arguments.size) {
+            if (argsHandledCounter < command.arguments.size) {
                 // Add with key = argument.name, value = arg
-                providedPositionalArguments[command.arguments[positionalArgumentCounter].name] = arg
-                positionalArgumentCounter++
+                providedPositionalArguments[command.arguments[argsHandledCounter].name] = arg
+                argsHandledCounter++
             } else {
                 // Error: more positional arguments provided than expected
                 // TODO: Handle error
@@ -69,4 +68,19 @@ fun parseArgs(command: Command, args: List<String>): ProvidedParameters {
         }
     }
     return ProvidedParameters(providedPositionalArguments, providedOptions)
+}
+
+private fun enoughArgsProvided(iterator: ListIterator<String>, requiredArgs: Int): Boolean {
+    if (requiredArgs <= 0) return true
+
+    var remaining = requiredArgs
+    while (iterator.hasNext()) {
+        if (iterator.next().startsWith("-")) {
+            // Next option detected. Check if enough args provided
+            return remaining == 0
+        } else {
+            remaining--
+        }
+    }
+    return remaining == 0
 }
