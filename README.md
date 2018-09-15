@@ -12,7 +12,7 @@ JAR file (see jvm submodule) for a simple integration with Kotlin/JVM is planned
 
 Issues, contributions and Kotlin/Native expertise are very welcome.
 
-## Build the project
+## Project structure
 The project consists of three gradle submodules:
 - `native`
   * The actual library developed with Kotlin/Native
