@@ -18,13 +18,18 @@ data class Command(val name: String,
                    val description: String = "",
                    val arguments: List<Parameter.Argument> = emptyList(),
                    val options: List<Parameter.Option> = emptyList(),
-                   val action: ((Command, ProvidedParameters) -> Unit)? = null) {
+                   val action: ((Command, ParseResult.Parameters) -> Unit)? = null) {
     fun getOptionByName(name: String): Parameter.Option? {
         return options.find { it.name == name }
     }
 
     fun execute(args: List<String> = emptyList()) {
-        action?.invoke(this, parseArgs(this, args))
+
+        val parseResult = parseArgs(this, args)
+        when (parseResult) {
+            is ParseResult.Parameters -> action?.invoke(this, parseResult)
+            is ParseResult.Error -> println(parseResult.message)
+        }
     }
 }
 
@@ -38,5 +43,10 @@ sealed class Parameter {
     }
 }
 
-data class ProvidedParameters(val positionalArguments: Map<String, String> = mapOf(),
-                              val options: Map<String, List<String>> = mapOf())
+sealed class ParseResult {
+    data class Parameters(val positionalArguments: Map<String, String> = mapOf(),
+                          val options: Map<String, List<String>> = mapOf()) : ParseResult()
+
+    data class Error(val message: String) : ParseResult()
+}
+

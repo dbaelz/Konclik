@@ -26,9 +26,9 @@ class CommandBuilder {
     private var metadata: Pair<String, String> = Pair("", "")
     private var arguments = listOf<Parameter.Argument>()
     private var options = listOf<Parameter.Option>()
-    private var action: ((Command, ProvidedParameters) -> Unit)? = null
+    private var action: ((Command, ParseResult.Parameters) -> Unit)? = null
 
-    fun action(block: (command: Command, ProvidedParameters) -> Unit) {
+    fun action(block: (command: Command, parameters: ParseResult.Parameters) -> Unit) {
         action = block
     }
 
@@ -48,7 +48,6 @@ class CommandBuilder {
 
 @KonclikDsl
 class MetadataBuilder {
-    // TODO: Other way for required name, non-null name then lateinit. Or Null?
     lateinit var name: String
     var description: String = ""
 
