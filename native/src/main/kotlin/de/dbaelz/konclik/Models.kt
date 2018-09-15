@@ -18,17 +18,17 @@ data class Command(val name: String,
                    val description: String = "",
                    val arguments: List<Parameter.Argument> = emptyList(),
                    val options: List<Parameter.Option> = emptyList(),
-                   val action: ((Command, ParseResult.Parameters) -> Unit)? = null) {
+                   val action: ((Command, ParseResult.Parameters) -> Unit)? = null,
+                   val onError: ((Command, ParseResult.Error) -> Unit)? = null) {
     fun getOptionByName(name: String): Parameter.Option? {
         return options.find { it.name == name }
     }
 
     fun execute(args: List<String> = emptyList()) {
-
         val parseResult = parseArgs(this, args)
         when (parseResult) {
             is ParseResult.Parameters -> action?.invoke(this, parseResult)
-            is ParseResult.Error -> println(parseResult.message)
+            is ParseResult.Error -> if (onError != null) onError.invoke(this, parseResult) else println(parseResult.message)
         }
     }
 }

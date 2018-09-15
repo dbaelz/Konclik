@@ -27,9 +27,14 @@ class CommandBuilder {
     private var arguments = listOf<Parameter.Argument>()
     private var options = listOf<Parameter.Option>()
     private var action: ((Command, ParseResult.Parameters) -> Unit)? = null
+    private var onError: ((Command, ParseResult.Error) -> Unit)? = null
 
     fun action(block: (command: Command, parameters: ParseResult.Parameters) -> Unit) {
         action = block
+    }
+
+    fun onError(block: (command: Command, error: ParseResult.Error) -> Unit) {
+        onError = block
     }
 
     fun metadata(block: MetadataBuilder.() -> Unit) {
@@ -43,7 +48,7 @@ class CommandBuilder {
     }
 
 
-    fun build(): Command = Command(metadata.first, metadata.second, arguments, options, action)
+    fun build(): Command = Command(metadata.first, metadata.second, arguments, options, action, onError)
 }
 
 @KonclikDsl

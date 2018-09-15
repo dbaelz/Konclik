@@ -66,6 +66,10 @@ fun main(args: Array<String>) {
                 println(command)
                 println(providedParameters)
             }
+            onError { command, error ->
+                println("Error executing command \"${command.name}\"")
+                println(error.message)
+            }
         }
     }
 
