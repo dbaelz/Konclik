@@ -13,16 +13,23 @@ JAR file (see jvm submodule) for a simple integration with Kotlin/JVM is planned
 Issues, contributions and Kotlin/Native expertise are very welcome.
 
 ## Build the project
-The `native` submodule can be build with the integrated Gradle wrapper.
-* Execute the `build` task to download all dependencies including Kotlin/Native
-and build the project.
-* Use the `run` task to execute the main function of the example project without args
-The `jvm` submodule adds the source code from the native submodule to the classpath.
+The project consists of three gradle submodules:
+- `native`
+  * The actual library developed with Kotlin/Native
+  * To build it, just execute the `build` task of Gradle. This task
+  downloads all dependencies including Kotlin/Native and creates the library (klib) file.
+- `example`
+  * Includes an example usage provided with an executable
+  * Use the `assemble` task to build the executable in the `build` directory. Afterwards,
+  it can be used as CLI application
+- `jvm`
+  * This module adds the source code from the native and example submodules to the classpath.
 It's currently used to just run the example on the JVM. In the future it will also build the JAR.
 
 ## DSL Example/Usage
 The DSL is still WIP and might be changed in the future.
-At the moment, some basic features are supported. The DSL consists of:
+At the moment, the basic features required to build a CLI application are supported.
+The DSL consists of:
 - `konclikApp`: The CLI app
   * The app provides optional `metadata`
   * A app consists of one or more `command` entries
@@ -34,7 +41,7 @@ At the moment, some basic features are supported. The DSL consists of:
     * `options`: Options are optional and could be switch or value parameters
   * The `action` consists of the logic to execute for the command
 
-For a working example see the CLI application in [Example.kt](https://github.com/dbaelz/Konclik/blob/master/native/src/example/kotlin/Example.kt).
+For a working example see the CLI application in the example submodule: [Example.kt](https://github.com/dbaelz/Konclik/blob/master/example/src/main/kotlin/Example.kt)
 
 
 

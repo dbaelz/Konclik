@@ -17,7 +17,7 @@ sourceSets {
     main {
         kotlin {
             srcDirs += [ "${project(":native").projectDir}/src/main/kotlin",
-                         "${project(":native").projectDir}/src/example/kotlin"]
+                         "${project(":example").projectDir}/src/main/kotlin"]
         }
     }
 }

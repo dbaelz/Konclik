@@ -1,6 +1,6 @@
 buildscript {
     ext.kotlin_version = '1.2.51'
-    ext.konan_version = '0.9'
+    ext.kotlin_native_plugin_version = '0.9'
 
     repositories {
         mavenCentral()
@@ -17,6 +17,6 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-native-gradle-plugin:$konan_version"
+        classpath "org.jetbrains.kotlin:kotlin-native-gradle-plugin:$kotlin_native_plugin_version"
     }
 }

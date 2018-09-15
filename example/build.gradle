@@ -1,10 +1,12 @@
 apply plugin: 'org.jetbrains.kotlin.platform.native'
 
-group 'de.dbaelz'
-version '0.0.1'
 
 components.main {
     targets = ['linux']
 
-    outputKinds = [KLIBRARY]
+    outputKinds = [EXECUTABLE]
+}
+
+dependencies {
+    implementation project(':native')
 }
