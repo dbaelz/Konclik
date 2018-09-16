@@ -3,15 +3,24 @@ package de.dbaelz.konclik
 data class KonclikApp(val name: String = "",
                       val description: String = "",
                       private val commands: List<Command> = emptyList()) {
-    private fun findCommand(name: String): Command? = commands.find { it.name == name }
-
     fun run(args: List<String> = emptyList()) {
-        // TODO: Handle empty args including "no command"? Show some kind of help text?
-        args.firstOrNull()?.let {
-            // Find the command and hand over the args (without the first arg which was the command name)
-            findCommand(it)?.execute(args.drop(1))
+        if (args.isEmpty()) {
+            showHelp()
+        } else {
+            findCommand(args.first())?.execute(args.drop(1))
         }
     }
+
+    private fun showHelp() {
+        println("$name: $description")
+        println()
+        println("Available commands:")
+        commands.forEach {
+            println("${it.name}: ${it.description}")
+        }
+    }
+
+    private fun findCommand(name: String): Command? = commands.find { it.name == name }
 }
 
 data class Command(val name: String,
