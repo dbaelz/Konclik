@@ -9,6 +9,7 @@ fun main(args: Array<String>) {
         metadata {
             name = "Example Application"
             description = "An example with two commands"
+            version = "0.4.2"
         }
         command {
             metadata {

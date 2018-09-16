@@ -7,18 +7,27 @@ fun konclikApp(block: KonclikAppBuilder.() -> Unit): KonclikApp = KonclikAppBuil
 
 @KonclikDsl
 class KonclikAppBuilder {
-    private var metadata: Pair<String, String> = Pair("", "")
+    private var metadata:  Triple<String, String, String> = Triple("", "", "")
     private var commands = mutableListOf<Command>()
 
-    fun metadata(block: MetadataBuilder.() -> Unit) {
-        metadata = MetadataBuilder().apply(block).build()
+    fun metadata(block: AppMetadataBuilder.() -> Unit) {
+        metadata = AppMetadataBuilder().apply(block).build()
     }
 
     fun command(block: CommandBuilder.() -> Unit) {
         commands.add(CommandBuilder().apply(block).build())
     }
 
-    fun build(): KonclikApp = KonclikApp(metadata.first, metadata.second, commands)
+    fun build(): KonclikApp = KonclikApp(metadata.first, metadata.second, metadata.third, commands)
+}
+
+@KonclikDsl
+class AppMetadataBuilder {
+    var name: String = ""
+    var description: String = ""
+    var version: String = ""
+
+    fun build(): Triple<String, String, String> = Triple(name, description, version)
 }
 
 @KonclikDsl

@@ -2,6 +2,7 @@ package de.dbaelz.konclik
 
 data class KonclikApp(val name: String = "",
                       val description: String = "",
+                      val version: String = "",
                       private val commands: List<Command> = emptyList()) {
     fun run(args: List<String> = emptyList()) {
         if (args.isEmpty()) {
@@ -13,6 +14,7 @@ data class KonclikApp(val name: String = "",
 
     private fun showHelp() {
         println("$name: $description")
+        if (version.isNotEmpty()) println("Version: $version")
         println()
         println("Available commands:")
         commands.forEach {
