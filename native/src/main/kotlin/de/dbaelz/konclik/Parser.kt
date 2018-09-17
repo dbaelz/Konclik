@@ -19,7 +19,8 @@ fun parseArgs(command: Command, args: List<String>): ParseResult {
             positionalArgumentsHandled = true
 
             if (option == null) {
-                return ParseResult.Error("ERROR: The command has no option \"$arg\"")
+                return ParseResult.Error(ParseResult.Error.Code.NO_OPTION_AVAILABLE,
+                        arg, "ERROR: The command has no option \"$arg\"")
             }
 
             when (option) {
@@ -45,7 +46,8 @@ fun parseArgs(command: Command, args: List<String>): ParseResult {
                         }
                         providedOptions[option.name] = values
                     } else {
-                        return ParseResult.Error("ERROR: Not enough args provided for option ${option.name}")
+                        return ParseResult.Error(ParseResult.Error.Code.NOT_ENOUGH_VALUES_FOR_OPTION,
+                                option.name, "ERROR: Not enough values provided for option ${option.name}")
                     }
                 }
             }
@@ -57,10 +59,12 @@ fun parseArgs(command: Command, args: List<String>): ParseResult {
                 providedPositionalArguments[command.arguments[argsHandledCounter].name] = arg
                 argsHandledCounter++
             } else {
-                return ParseResult.Error("ERROR: More positional arguments provided than expected. Argument: $arg")
+                return ParseResult.Error(ParseResult.Error.Code.MORE_POSITIONAL_ARGUMENTS_THAN_EXPECTED,
+                        arg, "ERROR: More positional arguments provided than expected. Argument: $arg")
             }
         } else {
-            return ParseResult.Error("ERROR: The positional arguments must precede the options. Argument: $arg")
+            return ParseResult.Error(ParseResult.Error.Code.POSITIONAL_ARGUMENT_AFTER_OPTION,
+                    arg, "ERROR: The positional arguments must precede the options. Argument: $arg")
         }
     }
     return ParseResult.Parameters(providedPositionalArguments, providedOptions)

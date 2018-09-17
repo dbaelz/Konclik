@@ -37,9 +37,11 @@ The DSL consists of:
 - `command`:
   * It's identified by its `name`. The `description` is optional
   * `parameters` can be defined for the command. They evaluated in the following order:
-    * `arguments`: Positional arguments, internaly evaluated by the order of the list
+    * `arguments`: Positional arguments, internally evaluated by the order of the list
     * `options`: Options are optional and could be switch or value parameters
   * The `action` consists of the logic to execute for the command
+  * By default, parser errors are printed to standard out.
+  With `onError` this can be changed and custom error handling is possible
 
 For a working example see the CLI application in the example submodule: [Example.kt](https://github.com/dbaelz/Konclik/blob/master/example/src/main/kotlin/Example.kt)
 

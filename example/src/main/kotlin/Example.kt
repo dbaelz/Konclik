@@ -69,7 +69,7 @@ fun main(args: Array<String>) {
             }
             onError { command, error ->
                 println("Error executing command \"${command.name}\"")
-                println(error.message)
+                println(error.toString())
             }
         }
     }

@@ -39,7 +39,7 @@ data class Command(val name: String,
         val parseResult = parseArgs(this, args)
         when (parseResult) {
             is ParseResult.Parameters -> action?.invoke(this, parseResult)
-            is ParseResult.Error -> if (onError != null) onError.invoke(this, parseResult) else println(parseResult.message)
+            is ParseResult.Error -> if (onError != null) onError.invoke(this, parseResult) else println(parseResult.defaultMessage)
         }
     }
 }
@@ -58,6 +58,13 @@ sealed class ParseResult {
     data class Parameters(val positionalArguments: Map<String, String> = mapOf(),
                           val options: Map<String, List<String>> = mapOf()) : ParseResult()
 
-    data class Error(val message: String) : ParseResult()
+    data class Error(val code: Code, val parsedValue: String = "", val defaultMessage: String) : ParseResult() {
+        enum class Code {
+            NO_OPTION_AVAILABLE,
+            NOT_ENOUGH_VALUES_FOR_OPTION,
+            MORE_POSITIONAL_ARGUMENTS_THAN_EXPECTED,
+            POSITIONAL_ARGUMENT_AFTER_OPTION
+        }
+    }
 }
 
