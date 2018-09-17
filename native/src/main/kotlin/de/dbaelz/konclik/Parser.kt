@@ -46,7 +46,7 @@ fun parseArgs(command: Command, args: List<String>): ParseResult {
                         providedOptions[option.name] = values
                     } else {
                         return ParseResult.Error(ParseResult.Error.Code.NOT_ENOUGH_VALUES_FOR_OPTION,
-                                option.name, "ERROR: Not enough values provided for option ${option.name}")
+                                option.name, "ERROR: Not enough values provided for option \"${option.name}\"")
                     }
                 }
                 is Parameter.Option.Choice -> {
@@ -56,11 +56,11 @@ fun parseArgs(command: Command, args: List<String>): ParseResult {
                             providedOptions[option.name] = listOf(value)
                         } else {
                             return ParseResult.Error(ParseResult.Error.Code.INCORRECT_CHOICE_VALUE_PROVIDED,
-                                    option.name, "ERROR: Incorrect value provided for choice option ${option.name}")
+                                    option.name, "ERROR: Incorrect value provided for choice option \"${option.name}\"")
                         }
                     } else {
                         return ParseResult.Error(ParseResult.Error.Code.NOT_ENOUGH_VALUES_FOR_OPTION,
-                                option.name, "ERROR: Not enough values provided for option ${option.name}")
+                                option.name, "ERROR: Not enough values provided for option \"${option.name}\"")
                     }
                 }
             }
@@ -73,11 +73,11 @@ fun parseArgs(command: Command, args: List<String>): ParseResult {
                 argsHandledCounter++
             } else {
                 return ParseResult.Error(ParseResult.Error.Code.MORE_POSITIONAL_ARGUMENTS_THAN_EXPECTED,
-                        arg, "ERROR: More positional arguments provided than expected. Argument: $arg")
+                        arg, "ERROR: More positional arguments provided than expected. Argument: \"$arg\"")
             }
         } else {
             return ParseResult.Error(ParseResult.Error.Code.POSITIONAL_ARGUMENT_AFTER_OPTION,
-                    arg, "ERROR: The positional arguments must precede the options. Argument: $arg")
+                    arg, "ERROR: The positional arguments must precede the options. Argument: \"$arg\"")
         }
     }
 
