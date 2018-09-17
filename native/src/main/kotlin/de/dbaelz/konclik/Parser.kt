@@ -23,7 +23,7 @@ fun parseArgs(command: Command, args: List<String>): ParseResult {
             }
 
             when (option) {
-                is Parameter.Option.Switch -> providedOptions.put(option.name, emptyList())
+                is Parameter.Option.Switch -> providedOptions[option.name] = emptyList()
                 is Parameter.Option.Value -> {
                     val requiredArgs = option.numberArgs - option.defaults.size
                     if (enoughArgsProvided(args.listIterator(argsListIterator.nextIndex()), requiredArgs)) {
@@ -64,6 +64,15 @@ fun parseArgs(command: Command, args: List<String>): ParseResult {
         } else {
             return ParseResult.Error(ParseResult.Error.Code.POSITIONAL_ARGUMENT_AFTER_OPTION,
                     arg, "ERROR: The positional arguments must precede the options. Argument: $arg")
+        }
+    }
+
+    command.options.forEach { option ->
+        if (option is Parameter.Option.Value
+                && !providedOptions.containsKey(option.name)
+                && option.defaults.isNotEmpty()) {
+            // For value options without args provided, but with defaults: Add the defaults
+            providedOptions[option.name] = option.defaults
         }
     }
     return ParseResult.Parameters(providedPositionalArguments, providedOptions)
