@@ -11,8 +11,7 @@ fun parseArgs(command: Command, args: List<String>): ParseResult {
     while (argsListIterator.hasNext()) {
         val arg = argsListIterator.next()
 
-        if (arg.startsWith("-")) {
-            // It's an option (starting with "-" or "--")
+        if (isOption(arg)) {
             val option = command.getOptionByName(arg)
 
             // Option found: No more position arguments from here on
@@ -31,7 +30,7 @@ fun parseArgs(command: Command, args: List<String>): ParseResult {
                         val values = mutableListOf<String>()
                         while (argsListIterator.hasNext()) {
                             val current = argsListIterator.next()
-                            if (current.startsWith("-")) {
+                            if (isOption(current)) {
                                 // Next option detected: Move the cursor backwards so the arg is evaluated again
                                 argsListIterator.previous()
                                 break
@@ -75,7 +74,7 @@ private fun enoughArgsProvided(iterator: ListIterator<String>, requiredArgs: Int
 
     var remaining = requiredArgs
     while (iterator.hasNext()) {
-        if (iterator.next().startsWith("-")) {
+        if (isOption(iterator.next())) {
             // Next option detected. Check if enough args provided
             return remaining == 0
         } else {
@@ -84,3 +83,5 @@ private fun enoughArgsProvided(iterator: ListIterator<String>, requiredArgs: Int
     }
     return remaining == 0
 }
+
+private fun isOption(arg: String) = arg.startsWith("--")

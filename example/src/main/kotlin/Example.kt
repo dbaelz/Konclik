@@ -39,7 +39,9 @@ fun main(args: Array<String>) {
                     var times = 1
                     if (it.isNotEmpty()) {
                         try {
-                            times = it.firstOrNull()?.toInt() ?: 1
+                            it.firstOrNull()?.toIntOrNull()?.let {
+                                if (it > 0) times = it
+                            }
                         } catch (exception: NumberFormatException) {
                         }
                     }
