@@ -8,7 +8,7 @@ fun main(args: Array<String>) {
     val konclikApp = konclikApp {
         metadata {
             name = "Example Application"
-            description = "An example with two commands"
+            description = "Demo of the available DSL"
             version = "0.4.2"
         }
         command {
@@ -58,6 +58,24 @@ fun main(args: Array<String>) {
                     println()
                     println(command)
                     println(providedParameters)
+                }
+            }
+        }
+        command {
+            metadata {
+                name = "develop"
+            }
+            parameters {
+                options = listOf(
+                        Parameter.Option.Choice("--language", setOf("Kotlin", "Java"), "Kotlin")
+                )
+            }
+            action { _, parameters ->
+                parameters.options["--language"]?.firstOrNull()?.let {
+                    when (it) {
+                        "Kotlin" -> println("Yeah! Kotlin!")
+                        "Java" -> println("Really? Java?")
+                    }
                 }
             }
         }

@@ -49,6 +49,20 @@ fun parseArgs(command: Command, args: List<String>): ParseResult {
                                 option.name, "ERROR: Not enough values provided for option ${option.name}")
                     }
                 }
+                is Parameter.Option.Choice -> {
+                    if (enoughArgsProvided(args.listIterator(argsListIterator.nextIndex()), 1)) {
+                        val value = argsListIterator.next()
+                        if (option.choices.contains(value)) {
+                            providedOptions[option.name] = listOf(value)
+                        } else {
+                            return ParseResult.Error(ParseResult.Error.Code.INCORRECT_CHOICE_VALUE_PROVIDED,
+                                    option.name, "ERROR: Incorrect value provided for choice option ${option.name}")
+                        }
+                    } else {
+                        return ParseResult.Error(ParseResult.Error.Code.NOT_ENOUGH_VALUES_FOR_OPTION,
+                                option.name, "ERROR: Not enough values provided for option ${option.name}")
+                    }
+                }
             }
 
         } else if (!positionalArgumentsHandled) {
@@ -68,13 +82,21 @@ fun parseArgs(command: Command, args: List<String>): ParseResult {
     }
 
     command.options.forEach { option ->
-        if (option is Parameter.Option.Value
-                && !providedOptions.containsKey(option.name)
-                && option.defaults.isNotEmpty()) {
-            // For value options without args provided, but with defaults: Add the defaults
-            providedOptions[option.name] = option.defaults
+        if (providedOptions.containsKey(option.name)) {
+            return@forEach
+        }
+
+        // For value and choice options without args provided, but with default(s): Add the default(s)
+        when (option) {
+            is Parameter.Option.Value -> if (option.defaults.isNotEmpty()) {
+                providedOptions[option.name] = option.defaults
+            }
+            is Parameter.Option.Choice -> if (option.default.isNotEmpty()) {
+                providedOptions[option.name] = listOf(option.default)
+            }
         }
     }
+
     return ParseResult.Parameters(providedPositionalArguments, providedOptions)
 }
 

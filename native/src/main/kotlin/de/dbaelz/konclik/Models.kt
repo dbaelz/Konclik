@@ -51,6 +51,7 @@ sealed class Parameter {
     sealed class Option : Parameter() {
         data class Switch(override val name: String) : Option()
         data class Value(override val name: String, val numberArgs: Int = 1, val defaults: List<String> = emptyList()) : Option()
+        data class Choice(override val name: String, val choices: Set<String> = emptySet(), val default: String = "") : Option()
     }
 }
 
@@ -63,7 +64,8 @@ sealed class ParseResult {
             NO_OPTION_AVAILABLE,
             NOT_ENOUGH_VALUES_FOR_OPTION,
             MORE_POSITIONAL_ARGUMENTS_THAN_EXPECTED,
-            POSITIONAL_ARGUMENT_AFTER_OPTION
+            POSITIONAL_ARGUMENT_AFTER_OPTION,
+            INCORRECT_CHOICE_VALUE_PROVIDED
         }
     }
 }
