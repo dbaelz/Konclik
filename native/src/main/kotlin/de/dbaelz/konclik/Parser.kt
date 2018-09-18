@@ -94,6 +94,7 @@ fun parseArgs(command: Command, args: List<String>): ParseResult {
             is Parameter.Option.Choice -> if (option.default.isNotEmpty()) {
                 providedOptions[option.name] = listOf(option.default)
             }
+            else -> {}
         }
     }
 
