@@ -1,4 +1,5 @@
 apply plugin: 'org.jetbrains.kotlin.platform.native'
+apply plugin: 'maven-publish'
 
 group 'de.dbaelz'
 version '0.0.1'
@@ -7,4 +8,13 @@ components.main {
     targets = ['linux']
 
     outputKinds = [KLIBRARY]
+
+    pom {
+        withXml {
+            def root = it.asNode()
+            root.appendNode('name', 'Konclik')
+            root.appendNode('description', 'Kotlin/Native Command Line Interface Kit')
+            root.appendNode('url', 'https://github.com/dbaelz/Konclik')
+        }
+    }
 }

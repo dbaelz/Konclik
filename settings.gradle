@@ -1,2 +1,4 @@
 rootProject.name = 'konclik'
 include ':native', ':jvm', ':example'
+
+enableFeaturePreview('GRADLE_METADATA')
