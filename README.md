@@ -1,37 +1,37 @@
 # Konclik: Kotlin/Native Command Line Interface Kit
 Konclik is a library for the development of a CLI application defined by
 a Kotlin DSL. It's based on Kotlin/Native, so it could work on different platforms.
-
-## Development
-Due it's early development stage, the DSL only provides some basic features.
-Please stay tuned.
-
-Currently, Konclik supports `linux` and `macos` as target platforms. More targets will
-be supported/tested in the future. In addition to the Kotlin/Native targets a
-JAR file (see jvm submodule) for a simple integration with Kotlin/JVM is planned.
-
 Issues, contributions and Kotlin/Native expertise are very welcome.
+
 
 ## Project structure
 The project consists of three gradle submodules:
-- `native`
-  * The actual library developed with Kotlin/Native
-  * To build it, just execute the `build` task of Gradle. This task
-  downloads all dependencies including Kotlin/Native and creates the library (klib) file.
-- `example`
-  * Includes an example usage provided with an executable
-  * Use the `assemble` task to build the executable in the `build` directory. Afterwards,
-  it can be used as CLI application
-- `jvm`
-  * This module adds the source code from the native and example submodules to the classpath.
-It's currently used to just run the example on the JVM. In the future it will also build the JAR.
+- `native`: The library developed with Kotlin, which builds the project as Kotlin/Native library
+- `jvm`: Submodule to create a JAR containing the class files of the library
+- `example`: An example, which demonstrates the usage as Kotlin/Native executable
 
-## DSL Example/Usage
-The DSL is still WIP and might be changed in the future.
-At the moment, the basic features required to build a CLI application are supported.
+
+## Artifacts
+Konclik supports the usage as native library due Kotlin/Native and as a JAR file for the JVM.
+In the future both artifacts will be provided due Maven Central.
+
+### Native library
+To build the library with Kotlin/Native, just execute the `build` task of Gradle. This task
+downloads all dependencies including Kotlin/Native and creates the library (klib) file.
+Currently, Konclik supports `linux` and `macos` as target platforms. More targets will
+be supported/tested in the future.
+
+### JAR
+In addition to the native library, Konclik could be used on the JVM. The `jvm` submodule creates
+the jar file with the `assemble` task. For local testing the `publishToMavenLocal` could be used.
+This task generates the POM and copies the library to the local maven cache.
+
+## Konclik DSL Example Example/Usage
+The DSL is WIP, but provides enough features to build a basic CLI application.
+
 The DSL consists of:
 - `konclikApp`: The CLI app
-  * The app provides optional `metadata`
+  * The app provides optional `metadata` (name, description and version)
   * A app consists of one or more `command` entries
   * Use `run()` to parse the provided CLI args and execute the command with these args
 - `command`:
@@ -44,7 +44,6 @@ The DSL consists of:
   With `onError` this can be changed and custom error handling is possible
 
 For a working example see the CLI application in the example submodule: [Example.kt](https://github.com/dbaelz/Konclik/blob/master/example/src/main/kotlin/Example.kt)
-
 
 
 ## License
