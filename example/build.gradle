@@ -2,7 +2,7 @@ apply plugin: 'org.jetbrains.kotlin.platform.native'
 
 
 components.main {
-    targets = ['linux']
+    targets = ['linux', 'macos']
 
     outputKinds = [EXECUTABLE]
 }

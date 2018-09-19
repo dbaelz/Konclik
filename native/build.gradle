@@ -5,7 +5,7 @@ group 'de.dbaelz'
 version '0.0.1'
 
 components.main {
-    targets = ['linux']
+    targets = ['linux', 'macos']
 
     outputKinds = [KLIBRARY]
 

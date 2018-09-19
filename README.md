@@ -6,7 +6,7 @@ a Kotlin DSL. It's based on Kotlin/Native, so it could work on different platfor
 Due it's early development stage, the DSL only provides some basic features.
 Please stay tuned.
 
-Currently, Konclik only supports one target: `linux`. More targets will
+Currently, Konclik supports `linux` and `macos` as target platforms. More targets will
 be supported/tested in the future. In addition to the Kotlin/Native targets a
 JAR file (see jvm submodule) for a simple integration with Kotlin/JVM is planned.
 
