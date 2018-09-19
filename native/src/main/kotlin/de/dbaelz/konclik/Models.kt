@@ -8,8 +8,17 @@ data class KonclikApp(val name: String = "",
         if (args.isEmpty()) {
             showHelp()
         } else {
-            findCommand(args.first())?.execute(args.drop(1))
+            val commandName = args.first()
+            if (commandName == "--version") {
+                showVersion()
+            } else {
+                findCommand(commandName)?.execute(args.drop(1))
+            }
         }
+    }
+
+    private fun showVersion() {
+        println("$name; Version $version")
     }
 
     private fun showHelp() {
