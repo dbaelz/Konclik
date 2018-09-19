@@ -1,8 +1,13 @@
 # Konclik: Kotlin/Native Command Line Interface Kit
-Konclik is a library for the development of a CLI application defined by
-a Kotlin DSL. It's based on Kotlin/Native, so it could work on different platforms.
-Issues, contributions and Kotlin/Native expertise are very welcome.
+Konclik is a library for the development of a CLI application.
 
+##### Why Konclik?
+- Provides a simple yet useful Kotlin DSL to define the application
+- It's based on Kotlin/Native, so it works on different platforms
+  - Native library for fast, platform independent apps on Linux and macOS without a JVM
+  - JAR file to use the library on the JVM and with existing Java code
+
+Issues, contributions and suggestions are very welcome.
 
 ## Project structure
 The project consists of three gradle submodules:
@@ -13,7 +18,8 @@ The project consists of three gradle submodules:
 
 ## Artifacts
 Konclik supports the usage as native library due Kotlin/Native and as a JAR file for the JVM.
-In the future both artifacts will be provided due Maven Central.
+Currently, it's necessary to build the artifacts locally.
+In the future the artifacts will be provided due a software repository like Maven Central or Bintray jcenter.
 
 ### Native library
 To build the library with Kotlin/Native, just execute the `build` task of Gradle. This task
@@ -22,14 +28,13 @@ Currently, Konclik supports `linux` and `macos` as target platforms. More target
 be supported/tested in the future.
 
 ### JAR
-In addition to the native library, Konclik could be used on the JVM. The `jvm` submodule creates
-the jar file with the `assemble` task. For local testing the `publishToMavenLocal` could be used.
+The `jvm` submodule creates the jar file with the `assemble` task.
+For local testing the `publishToMavenLocal` could be used.
 This task generates the POM and copies the library to the local maven cache.
 
-## Konclik DSL Example Example/Usage
-The DSL is WIP, but provides enough features to build a basic CLI application.
-
-The DSL consists of:
+## Konclik DSL Example
+The current DSL is WIP, but base features are stable and provide enough
+feature to build effective CLI applications. The DSL consists of:
 - `konclikApp`: The CLI app
   * The app provides optional `metadata` (name, description and version)
   * A app consists of one or more `command` entries
