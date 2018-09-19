@@ -1,0 +1,23 @@
+def pomBaseData = {
+    licenses {
+        license {
+            name "Apache License, Version 2.0"
+            url "https://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+    }
+    scm {
+        url "https://github.com/dbaelz/Konclik"
+    }
+}
+
+afterEvaluate {
+    project.publishing.publications.forEach { publication ->
+        publication.pom.withXml {
+            def root = it.asNode()
+            root.appendNode('name', project.name)
+            root.appendNode('description', 'Kotlin/Native Command Line Interface Kit')
+            root.appendNode('url', 'https://github.com/dbaelz/Konclik')
+            root.children().last() + pomBaseData
+        }
+    }
+}

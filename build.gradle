@@ -20,3 +20,23 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-native-gradle-plugin:$kotlin_native_plugin_version"
     }
 }
+
+// Global configuration for all Konclik library submodules
+def libs = ['native', 'jvm']
+configure(subprojects.findAll { libs.contains(it.name) }) {
+    group 'de.dbaelz.konclik'
+    version '0.0.1'
+
+    apply plugin: 'maven-publish'
+    apply from: rootProject.file('publish.gradle')
+
+    if(it.name == 'jvm') {
+        publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    from components.java
+                }
+            }
+        }
+    }
+}
