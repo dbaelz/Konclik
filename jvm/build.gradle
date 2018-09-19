@@ -16,6 +16,11 @@ sourceSets {
             srcDirs += [ "${project(":native").projectDir}/src/main/kotlin"]
         }
     }
+    test {
+        kotlin {
+            srcDirs += [ "${project(":example").projectDir}/src/main/kotlin"]
+        }
+    }
 }
 
 compileKotlin {
