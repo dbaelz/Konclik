@@ -12,7 +12,7 @@ data class KonclikApp(val name: String = "",
             if (commandName == "--version") {
                 showVersion()
             } else {
-                findCommand(commandName)?.execute(args.drop(1))
+                findCommand(commandName)?.execute(args.drop(1)) ?: showHelp()
             }
         }
     }
