@@ -18,8 +18,8 @@ The project consists of three gradle submodules:
 
 ## Artifacts
 Konclik supports the usage as native library due Kotlin/Native and as a JAR file for the JVM.
-Currently, it's necessary to build the artifacts locally.
-In the future the artifacts will be provided due a software repository like Maven Central or Bintray jcenter.
+The artifacts of the library (native and jvm) are provided due Bintray jcenter.
+See the Setup section for detailed information how to integrate the library into your project.
 
 ### Native library
 To build the library with Kotlin/Native, just execute the `build` task of Gradle. This task
@@ -31,6 +31,35 @@ be supported/tested in the future.
 The `jvm` submodule creates the jar file with the `assemble` task.
 For local testing the `publishToMavenLocal` could be used.
 This task generates the POM and copies the library to the local maven cache.
+
+## Setup
+Both libraries could be used as Gradle dependencies. Add jcenter as
+repository and the library as dependency.
+
+#### Native library
+```gradle
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation "de.dbaelz.konclik:native:0.5.0"
+}
+```
+
+
+#### JAR
+```gradle
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation "de.dbaelz.konclik:jvm:0.5.0"
+}
+```
+
+
 
 ## Konclik DSL Example
 The current DSL is WIP, but base features are stable and provide enough
