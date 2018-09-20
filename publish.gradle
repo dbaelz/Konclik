@@ -21,3 +21,30 @@ afterEvaluate {
         }
     }
 }
+
+repositories {
+    maven {
+        url  "https://dl.bintray.com/dbaelz/konclik"
+    }
+}
+
+bintray {
+    user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+    key = project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+    publish = false
+    override = true
+
+    pkg {
+        userOrg = 'dbaelz'
+        repo = 'konclik'
+        name = 'library'
+        licenses = ['Apache-2.0']
+        publications = ['mavenProject']
+        vcsUrl = 'https://github.com/dbaelz/Konclik.git'
+
+        version {
+            released = new Date()
+            vcsTag = project.version
+        }
+    }
+}
