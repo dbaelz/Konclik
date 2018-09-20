@@ -33,15 +33,24 @@ For local testing the `publishToMavenLocal` could be used.
 This task generates the POM and copies the library to the local maven cache.
 
 ## Setup
-Both libraries could be used as Gradle dependencies. Add jcenter as
-repository and the library as dependency.
+Both libraries could be used as Gradle dependencies. Add the maven repository
+to your repository list and the library (native or jar) as dependency.
+The repository is submitted to jcenter, but it's not accepted yet. So in
+the future it should be available due the `jcenter()` repository.
+
+#### Repository
+```gradle
+repositories {
+    maven {
+        url "https://dl.bintray.com/dbaelz/konclik"
+    }
+    // Other repos like:
+    //jcenter()
+}
+```
 
 #### Native library
 ```gradle
-repositories {
-    jcenter()
-}
-
 dependencies {
     implementation "de.dbaelz.konclik:native:0.5.0"
 }
@@ -50,10 +59,6 @@ dependencies {
 
 #### JAR
 ```gradle
-repositories {
-    jcenter()
-}
-
 dependencies {
     implementation "de.dbaelz.konclik:jvm:0.5.0"
 }

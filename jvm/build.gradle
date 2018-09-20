@@ -23,6 +23,13 @@ sourceSets {
     }
 }
 
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+tasks.build.dependsOn(['sourcesJar'])
+
 compileKotlin {
     kotlinOptions.jvmTarget = "1.8"
 }

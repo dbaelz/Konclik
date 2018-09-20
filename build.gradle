@@ -38,6 +38,7 @@ configure(subprojects.findAll { libs.contains(it.name) }) {
             mavenProject(MavenPublication) {
                 if (project.name == 'jvm') {
                     from components.java
+                    artifact sourcesJar
                 }
 
                 groupId project.group
