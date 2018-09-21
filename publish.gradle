@@ -10,17 +10,17 @@ def pomBaseData = {
     }
 }
 
-afterEvaluate {
-    project.publishing.publications.forEach { publication ->
-        publication.pom.withXml {
-            def root = it.asNode()
-            root.appendNode('name', project.name)
-            root.appendNode('description', 'Kotlin/Native Command Line Interface Kit')
-            root.appendNode('url', 'https://github.com/dbaelz/Konclik')
-            root.children().last() + pomBaseData
-        }
+def generatePom = { pom ->
+    pom.withXml {
+        def root = it.asNode()
+        root.appendNode('name', project.name)
+        root.appendNode('description', 'Kotlin/Native Command Line Interface Kit')
+        root.appendNode('url', 'https://github.com/dbaelz/Konclik')
+        root.children().last() + pomBaseData
     }
 }
+
+ext.generatePom = generatePom
 
 bintray {
     user = project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')

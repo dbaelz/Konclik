@@ -5,3 +5,5 @@ components.main {
 
     outputKinds = [KLIBRARY]
 }
+
+bintrayUpload.dependsOn publishToMavenLocal
