@@ -27,7 +27,7 @@ buildscript {
 def libs = ['native', 'jvm']
 configure(allprojects.findAll { libs.contains(it.name) }) {
     group 'de.dbaelz.konclik'
-    version '0.5.0'
+    version '0.6.0'
 
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.bintray'
