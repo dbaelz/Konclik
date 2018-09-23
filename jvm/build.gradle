@@ -8,6 +8,10 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    testImplementation "junit:junit:4.12"
+    testImplementation "org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version"
+    testImplementation "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
 }
 
 sourceSets {
@@ -18,7 +22,8 @@ sourceSets {
     }
     test {
         kotlin {
-            srcDirs += [ "${project(":example").projectDir}/src/main/kotlin"]
+            srcDirs += ["${project(":native").projectDir}/src/test/kotlin",
+                        "${project(":example").projectDir}/src/main/kotlin"]
         }
     }
 }
