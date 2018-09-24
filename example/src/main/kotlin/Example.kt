@@ -1,4 +1,6 @@
+import de.dbaelz.konclik.Command
 import de.dbaelz.konclik.Parameter
+import de.dbaelz.konclik.ParseResult
 import de.dbaelz.konclik.konclikApp
 
 fun main(args: Array<String>) {
@@ -83,10 +85,7 @@ fun main(args: Array<String>) {
             metadata {
                 name = "echo"
             }
-            action { command, providedParameters ->
-                println(command)
-                println(providedParameters)
-            }
+            action(::printlnAction)
             onError { command, error ->
                 println("Error executing command \"${command.name}\"")
                 println(error.toString())
@@ -95,4 +94,9 @@ fun main(args: Array<String>) {
     }
 
     konclikApp.run(args.toList())
+}
+
+private fun printlnAction(command: Command, parameters: ParseResult.Parameters) {
+    println(command)
+    println(parameters)
 }
