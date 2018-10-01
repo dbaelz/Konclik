@@ -42,3 +42,13 @@ bintray {
         }
     }
 }
+
+bintrayUpload.dependsOn publishToMavenLocal
+
+bintrayUpload.doFirst {
+    publishing.publications.each {
+        if (it instanceof MavenPublication) {
+            println("Upload to bintray: publication \"${it.getArtifactId()}\", artifacts ${it.getArtifacts()}")
+        }
+    }
+}
