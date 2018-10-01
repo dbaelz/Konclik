@@ -73,6 +73,8 @@ feature to build effective CLI applications. The DSL consists of:
   * The app provides optional `metadata` (name, description and version)
   * A app consists of one or more `command` entries
   * Use `run()` to parse the provided CLI args and execute the command with these args
+  * The app provides a help output consisting the available command, when a invalid command was entered
+  * It prints a version info  with `--version`
 - `command`:
   * It's identified by its `name`. The `description` is optional
   * `parameters` can be defined for the command. They evaluated in the following order:
@@ -80,6 +82,7 @@ feature to build effective CLI applications. The DSL consists of:
     * `options`: Options are optional and could be switch or value parameters
   * The `action` consists of the logic to execute for the command
   * By default, parser errors are printed to standard out.
+  * The command prints a help page with `--help` and returns
   With `onError` this can be changed and custom error handling is possible
 
 For a working example see the CLI application in the example submodule: [Example.kt](https://github.com/dbaelz/Konclik/blob/master/example/src/main/kotlin/Example.kt)
