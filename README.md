@@ -73,7 +73,7 @@ feature to build effective CLI applications. The DSL consists of:
   * The app provides optional `metadata` (name, description and version)
   * A app consists of one or more `command` entries
   * Use `run()` to parse the provided CLI args and execute the command with these args
-  * The app provides a help output consisting the available command, when a invalid command was entered
+  * The app provides a help output showing the available commands, when a invalid command was entered
   * It prints a version info  with `--version`
 - `command`:
   * It's identified by its `name`. The `description` is optional
