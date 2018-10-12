@@ -1,12 +1,105 @@
-apply plugin: 'org.jetbrains.kotlin.platform.native'
+apply plugin: 'kotlin-multiplatform'
+apply plugin: 'java'
 
+kotlin {
+    targets {
+        fromPreset(presets.macosX64, 'macos')
+        fromPreset(presets.linuxX64, 'linux')
+        fromPreset(presets.mingwX64, 'windows')
+        fromPreset(presets.jvm, 'jvm')
+        fromPreset(presets.js, 'js') {
+            compilations.main {
+                compileKotlinJs.kotlinOptions {
+                    moduleKind = "commonjs"
+                }
+            }
+        }
 
-components.main {
-    targets = ['linux', 'macos']
-
-    outputKinds = [EXECUTABLE]
+        configure([macos, linux, windows]) {
+            compilations.main.outputKinds 'executable'
+        }
+    }
 }
 
 dependencies {
-    implementation project(':native')
+    commonMainImplementation 'org.jetbrains.kotlin:kotlin-stdlib'
+    jvmMainImplementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    jsMainImplementation 'org.jetbrains.kotlin:kotlin-stdlib-js'
+
+    commonMainImplementation rootProject
+    jvmMainImplementation rootProject
+    jsMainImplementation rootProject
+    macosMainImplementation rootProject
+    linuxMainImplementation rootProject
+    windowsMainImplementation rootProject
+}
+
+['Macos', 'Linux', 'Windows'].forEach { target ->
+    task "run$target" {
+        dependsOn "linkDebugExecutable$target"
+        doLast {
+            exec {
+                commandLine kotlin.targets[target.toLowerCase()].compilations.main.getBinary('executable', 'debug')
+            }
+        }
+    }
+}
+
+def jvmCompilations = kotlin.targets.jvm.compilations
+task createExecutableJar(type: Jar) {
+    dependsOn jvmMainClasses
+    manifest {
+        attributes 'Main-Class': 'ExampleKt'
+    }
+    baseName = 'example'
+    from { jvmCompilations.main.output }
+    from { jvmCompilations.main.runtimeDependencyFiles.collect { it.isDirectory() ? it : zipTree(it) } }
+}
+
+task runJar(type: Exec) {
+    dependsOn createExecutableJar
+    commandLine "java", "-jar", "$buildDir/libs/example.jar"
+}
+
+apply plugin: 'com.moowork.node'
+
+node {
+    version = node_version
+    download = true
+}
+
+def jsCompilations = kotlin.targets.js.compilations
+task createJsRuntimeDir {
+    dependsOn jsMainClasses, jsTestClasses
+    doLast {
+        copy {
+            from jsCompilations.main.output.first()
+            into "$buildDir/js"
+        }
+        copy {
+            jsCompilations.test.runtimeDependencyFiles.each {
+                if (it.exists() && !it.isDirectory()) {
+                    from zipTree(it.absolutePath).matching { include '*.js' }
+                }
+            }
+            into "$buildDir/js/node_modules"
+        }
+    }
+}
+
+task runNodejs(type: NodeTask) {
+    dependsOn createJsRuntimeDir
+    script = file("$buildDir/js/example.js")
+    execOverrides {
+        it.workingDir = "$buildDir/js"
+    }
+}
+
+// Fix for https://github.com/srs/gradle-node-plugin/issues/301
+repositories.whenObjectAdded {
+    if (it instanceof IvyArtifactRepository) {
+        metadataSources {
+            artifact()
+        }
+    }
 }
