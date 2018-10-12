@@ -66,6 +66,7 @@ apply plugin: 'com.moowork.node'
 node {
     version = node_version
     download = true
+    workDir = rootProject.file('.gradle/nodejs')
 }
 
 def jsCompilations = kotlin.targets.js.compilations
