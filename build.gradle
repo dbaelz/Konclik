@@ -19,7 +19,6 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintray_plugin_version"
         classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
     }
 }
@@ -69,31 +68,24 @@ dependencies {
     jsTestImplementation 'org.jetbrains.kotlin:kotlin-test-js'
 }
 
-// Global configuration for all Konclik library submodules
-def libs = ['native', 'jvm']
-configure(allprojects.findAll { libs.contains(it.name) }) {
-    group 'de.dbaelz.konclik'
-    version '0.6.0'
+// Publishing configuration
+apply plugin: 'maven-publish'
+apply from: file('publish.gradle')
+group 'de.dbaelz.konclik'
+version '0.6.0'
 
-    apply plugin: 'maven-publish'
-    apply plugin: 'com.jfrog.bintray'
-    apply from: rootProject.file('publish.gradle')
-
-    publishing {
-        publications {
-            mavenProject(MavenPublication) {
-                if (project.name == 'jvm') {
-                    from components.java
-                    artifact sourcesJar
-                }
-
-                groupId project.group
-                artifactId project.name
-                version project.version
-
-                generatePom(pom)
+publishing {
+    repositories {
+        maven {
+            credentials {
+                username project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+                password project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
             }
+            url 'https://api.bintray.com/maven/dbaelz/Konclik/Konclik/'
         }
+    }
+    configure(publications) {
+        generatePom(pom)
     }
 }
 
