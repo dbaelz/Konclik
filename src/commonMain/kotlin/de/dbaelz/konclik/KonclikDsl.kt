@@ -4,6 +4,8 @@ package de.dbaelz.konclik
 annotation class KonclikDsl
 
 fun konclikApp(block: KonclikAppBuilder.() -> Unit): KonclikApp = KonclikAppBuilder().apply(block).build()
+fun konclikApp(args: Array<String>, block: KonclikAppBuilder.() -> Unit): Unit =
+    KonclikAppBuilder().apply(block).build().run(args.toList())
 
 @KonclikDsl
 class KonclikAppBuilder {
