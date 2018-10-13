@@ -115,6 +115,9 @@ task populateNodeModules {
 }
 
 task addYarnDeps(type: YarnTask) {
+    doFirst {
+        mkdir "$buildDir/yarn"
+    }
     args = ["add", "qunit@$qunit_version"]
 }
 
