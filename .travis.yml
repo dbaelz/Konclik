@@ -22,7 +22,7 @@ cache:
 
 deploy:
   provider: script
-  script: ./gradlew bintrayUpload
+  script: ./gradlew publish
   skip_cleanup: true
   dry-run: false
   on:
