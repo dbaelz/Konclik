@@ -9,7 +9,7 @@ import kotlin.test.assertTrue
 class ParserTest {
 
     @Test
-    fun `Command_without_Parameters_and_no_args_should_return_empty_maps`() {
+    fun Command_without_Parameters_and_no_args_should_return_empty_maps() {
         val result = parseArgs(Command("test"), emptyList())
 
         assertTrue(result is ParseResult.Parameters)
@@ -20,7 +20,7 @@ class ParserTest {
     }
 
     @Test
-    fun `Command_with_defaults_and_no_args_should_return_defaults`() {
+    fun Command_with_defaults_and_no_args_should_return_defaults() {
         val command = Command("test",
                 options = listOf(Parameter.Option.Value("--value1", 1, listOf("value1Default")),
                         Parameter.Option.Value("--value2", 2, listOf("value2Default1", "value2Default2")),
@@ -38,7 +38,7 @@ class ParserTest {
     }
 
     @Test
-    fun `Command_with_defaults_and_args_should_return_parsed_args`() {
+    fun Command_with_defaults_and_args_should_return_parsed_args() {
         val command = Command("test",
                 arguments = listOf(Parameter.Argument("argument1")),
                 options = listOf(Parameter.Option.Switch("--switch1"),
@@ -66,7 +66,7 @@ class ParserTest {
     // Parsing: Error Cases
 
     @Test
-    fun `Option_not_available`() {
+    fun Option_not_available() {
         val command = Command("test",
                 options = listOf(Parameter.Option.Value("--value1", 1, listOf("value1Default"))))
         val args = listOf("--value1", "value1Something", "--value2", "value2Something")
@@ -80,7 +80,7 @@ class ParserTest {
     }
 
     @Test
-    fun `Not_enough_values_for_value_option`() {
+    fun Not_enough_values_for_value_option() {
         val command = Command("test",
                 options = listOf(Parameter.Option.Value("--value1", 2, emptyList())))
         val args = listOf("--value1", "somevalue")
@@ -94,7 +94,7 @@ class ParserTest {
     }
 
     @Test
-    fun `No_value_provided_for_choice_option`() {
+    fun No_value_provided_for_choice_option() {
         val command = Command("test",
                 options = listOf(Parameter.Option.Choice("--value1", setOf("one", "two"))))
         val args = listOf("--value1")
@@ -108,7 +108,7 @@ class ParserTest {
     }
 
     @Test
-    fun `Incorrect_value_provided_for_choice_option`() {
+    fun Incorrect_value_provided_for_choice_option() {
         val command = Command("test",
                 options = listOf(Parameter.Option.Choice("--value1", setOf("one", "two"))))
         val args = listOf("--value1", "three")
@@ -122,7 +122,7 @@ class ParserTest {
     }
 
     @Test
-    fun `More_positional_arguments_provided_than_expected`() {
+    fun More_positional_arguments_provided_than_expected() {
         val command = Command("test",
                 arguments = listOf(Parameter.Argument("argument1")))
         val args = listOf("somearg", "anotherarg")
@@ -136,7 +136,7 @@ class ParserTest {
     }
 
     @Test
-    fun `Positional_argument_after_option`() {
+    fun Positional_argument_after_option() {
         val command = Command("test",
                 arguments = listOf(Parameter.Argument("argument1")),
                 options = listOf(Parameter.Option.Switch("--switch1"),
