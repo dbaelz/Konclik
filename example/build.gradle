@@ -19,19 +19,19 @@ kotlin {
             compilations.main.outputKinds 'executable'
         }
     }
+    sourceSets {
+      all {
+        dependencies {
+          implementation rootProject
+        }
+      }
+    }
 }
 
 dependencies {
     commonMainImplementation 'org.jetbrains.kotlin:kotlin-stdlib'
     jvmMainImplementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
     jsMainImplementation 'org.jetbrains.kotlin:kotlin-stdlib-js'
-
-    commonMainImplementation rootProject
-    jvmMainImplementation rootProject
-    jsMainImplementation rootProject
-    macosMainImplementation rootProject
-    linuxMainImplementation rootProject
-    windowsMainImplementation rootProject
 }
 
 ['Macos', 'Linux', 'Windows'].forEach { target ->
