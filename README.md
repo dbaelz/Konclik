@@ -1,4 +1,5 @@
 # Konclik: Kotlin/Native Command Line Interface Kit
+[![Build Status](https://travis-ci.com/dbaelz/Konclik.svg?branch=master)](https://travis-ci.com/dbaelz/Konclik)
 
 Konclik is a library for the development of a CLI application.
 
