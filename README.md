@@ -1,44 +1,37 @@
 # Konclik: Kotlin/Native Command Line Interface Kit
+[![Build Status](https://travis-ci.com/dbaelz/Konclik.svg?branch=master)](https://travis-ci.com/dbaelz/Konclik)
+
 Konclik is a library for the development of a CLI application.
 
 ##### Why Konclik?
+
 - Provides a simple yet useful Kotlin DSL to define the application
-- It's based on Kotlin/Native, so it works on different platforms
-  - Native library for fast, platform independent apps on Linux and macOS without a JVM
-  - JAR file to use the library on the JVM and with existing Java code
+- Built with Kotlin's [Multi-platform Project](https://kotlinlang.org/docs/reference/multiplatform.html) tools so you can write once and run everywhere
+- Targets Linux, Windows, MacOS, Jvm, and NodeJS
 
 Issues, contributions and suggestions are very welcome.
 
 ## Project structure
-The project consists of three gradle submodules:
-- `native`: The library developed with Kotlin, which builds the project as Kotlin/Native library
-- `jvm`: Submodule to create a JAR containing the class files of the library
-- `example`: An example, which demonstrates the usage as Kotlin/Native executable
 
+This project uses the [new MPP plugin](https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html), the root contains Konclik's core source in the `src` directory.
+In addition to the core, the following submodules are available.
+- `example`: An example, which demonstrates a Konclik app targeting MacOS, Linux, Windows, Jvm, and NodeJS.
 
-## Artifacts
-Konclik supports the usage as native library due Kotlin/Native and as a JAR file for the JVM.
-The artifacts of the library (native and jvm) are provided due Bintray jcenter.
-See the Setup section for detailed information how to integrate the library into your project.
+## Project Operation
 
-### Native library
-To build the library with Kotlin/Native, just execute the `build` task of Gradle. This task
-downloads all dependencies including Kotlin/Native and creates the library (klib) file.
-Currently, Konclik supports `linux` and `macos` as target platforms. More targets will
-be supported/tested in the future.
+*Note: If the Host machine does not support a specific target, that target's tasks will simply be ignored.*
 
-### JAR
-The `jvm` submodule creates the jar file with the `assemble` task.
-For local testing the `publishToMavenLocal` could be used.
-This task generates the POM and copies the library to the local maven cache.
+The following gradle tasks are available:
+- Testing: `jsTest`, `macosTest`, `jvmTest`, `linuxTest`, `windowsTest`
+- `publish`: Publish to bintray, replace the publishing url with your own repository.
+- `publishToMavenLocal`: Publish a version to your local machine, available in the `mavenLocal()` repository
+- Example App: `example:runMacos`, `example:runJar`, `example:runLinux`, `example:runWindows`, `example:runNodejs`
 
 ## Setup
-Both libraries could be used as Gradle dependencies. Add the maven repository
-to your repository list and the library (native or jar) as dependency.
-The repository is submitted to jcenter, but it's not accepted yet. So in
-the future it should be available due the `jcenter()` repository.
+Konclik is published to bintray.
 
 #### Repository
+
 ```gradle
 repositories {
     maven {
@@ -49,22 +42,21 @@ repositories {
 }
 ```
 
-#### Native library
+#### Download
+
 ```gradle
 dependencies {
-    implementation "de.dbaelz.konclik:native:0.5.0"
+    // With Gradle Metadata enabled, all targets can depend on
+    implementation "de.dbaelz.konclik:konclik:0.5.0"
+    
+    // All artifacts are available with the -target suffix
+    implementation "de.dbaelz.konclik:konclik-macos:0.5.0"
+    implementation "de.dbaelz.konclik:konclik-linux:0.5.0"
+    implementation "de.dbaelz.konclik:konclik-windows:0.5.0"
+    implementation "de.dbaelz.konclik:konclik-jvm:0.5.0"
+    implementation "de.dbaelz.konclik:konclik-js:0.5.0"
 }
 ```
-
-
-#### JAR
-```gradle
-dependencies {
-    implementation "de.dbaelz.konclik:jvm:0.5.0"
-}
-```
-
-
 
 ## Konclik DSL Example
 The current DSL is WIP, but base features are stable and provide enough
