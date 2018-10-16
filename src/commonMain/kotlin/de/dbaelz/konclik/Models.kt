@@ -89,7 +89,7 @@ data class Command(val name: String,
 sealed class Parameter {
     abstract val name: String
 
-    data class Argument(override val name: String) : Parameter()
+    data class Argument(override val name: String, val numberArgs: Int = 1) : Parameter()
     sealed class Option : Parameter() {
         data class Switch(override val name: String) : Option()
         data class Value(override val name: String, val numberArgs: Int = 1, val defaults: List<String> = emptyList()) : Option()
@@ -99,6 +99,7 @@ sealed class Parameter {
 
 sealed class ParseResult {
     data class Parameters(val positionalArguments: Map<String, String> = mapOf(),
+                          val varArgument: List<String> = emptyList(),
                           val options: Map<String, List<String>> = mapOf()) : ParseResult()
 
     data class Error(val code: Code, val parsedValue: String = "", val defaultMessage: String) : ParseResult() {

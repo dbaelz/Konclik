@@ -150,4 +150,77 @@ class ParserTest {
             assertEquals(ParseResult.Error.Code.POSITIONAL_ARGUMENT_AFTER_OPTION, result.code)
         }
     }
+
+    @Test
+    fun Vararg1() {
+        val command = Command("test",
+          arguments = listOf(Parameter.Argument("argument1", numberArgs = -1),
+            Parameter.Argument("argument2")))
+        val args = listOf("arg1", "arg1", "arg2")
+
+        val result = parseArgs(command, args)
+
+        assertTrue(result is ParseResult.Parameters)
+        if (result is ParseResult.Parameters) {
+            assertEquals(listOf("arg1", "arg1"), result.varArgument)
+            assertEquals("arg2", result.positionalArguments["argument2"])
+        }
+    }
+
+    @Test
+    fun Vararg2() {
+        val command = Command("test",
+          arguments = listOf(Parameter.Argument("argument1"),
+            Parameter.Argument("argument2", numberArgs = -1)))
+        val args = listOf("arg1", "arg2", "arg2")
+
+        val result = parseArgs(command, args)
+
+        assertTrue(result is ParseResult.Parameters)
+        if (result is ParseResult.Parameters) {
+            assertEquals(listOf("arg2", "arg2"), result.varArgument)
+            assertEquals("arg1", result.positionalArguments["argument1"])
+        }
+    }
+
+    @Test
+    fun Vararg3() {
+        val command = Command("test",
+          arguments = listOf(
+            Parameter.Argument("argument1", numberArgs = -1),
+            Parameter.Argument("argument2")),
+          options = listOf(
+            Parameter.Option.Switch("--test")
+          ))
+        val args = listOf("arg1", "arg1", "arg2", "--test")
+
+        val result = parseArgs(command, args)
+
+        assertTrue(result is ParseResult.Parameters)
+        if (result is ParseResult.Parameters) {
+            assertEquals(listOf("arg1", "arg1"), result.varArgument)
+            assertEquals("arg2", result.positionalArguments["argument2"])
+        }
+    }
+
+    @Test
+    fun Vararg4() {
+        val command = Command("test",
+          arguments = listOf(
+            Parameter.Argument("argument1", numberArgs = 2),
+            Parameter.Argument("argument2")),
+          options = listOf(
+            Parameter.Option.Switch("--test"),
+            Parameter.Option.Switch("--test2")
+          ))
+        val args = listOf("arg1", "arg1", "arg2", "--test", "--test2")
+
+        val result = parseArgs(command, args)
+
+        assertTrue(result is ParseResult.Parameters)
+        if (result is ParseResult.Parameters) {
+            assertEquals(listOf("arg1", "arg1"), result.varArgument)
+            assertEquals("arg2", result.positionalArguments["argument2"])
+        }
+    }
 }

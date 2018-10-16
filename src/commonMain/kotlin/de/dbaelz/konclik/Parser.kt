@@ -2,10 +2,12 @@ package de.dbaelz.konclik
 
 fun parseArgs(command: Command, args: List<String>): ParseResult {
     val providedPositionalArguments = mutableMapOf<String, String>()
+    val providedVarargs = mutableListOf<String>()
     val providedOptions = mutableMapOf<String, List<String>>()
 
     var positionalArgumentsHandled = false
     var argsHandledCounter = 0
+    var varargsHandledCounter = 0
 
     val argsListIterator = args.listIterator()
     while (argsListIterator.hasNext()) {
@@ -68,9 +70,44 @@ fun parseArgs(command: Command, args: List<String>): ParseResult {
         } else if (!positionalArgumentsHandled) {
             // It's a positional argument
             if (argsHandledCounter < command.arguments.size) {
-                // Add with key = argument.name, value = arg
-                providedPositionalArguments[command.arguments[argsHandledCounter].name] = arg
-                argsHandledCounter++
+                val argument = command.arguments[argsHandledCounter]
+                when {
+                    argument.numberArgs == -1 -> when (argsHandledCounter) {
+                        0 -> {
+                            val remainingArgs = args.drop(varargsHandledCounter).takeWhile { !isOption(it) }.count()
+                            val requiredArgs = command.arguments.lastIndex
+                            if (remainingArgs == requiredArgs) {
+                                argsHandledCounter++
+                                providedPositionalArguments[command.arguments[argsHandledCounter].name] = arg
+                                argsHandledCounter++
+                            } else {
+                                providedVarargs += arg
+                                varargsHandledCounter++
+                            }
+                        }
+                        else -> {
+                            providedVarargs += arg
+                            varargsHandledCounter++
+                        }
+                    }
+                    argument.numberArgs > 1 -> when {
+                        varargsHandledCounter < argument.numberArgs -> {
+                            providedVarargs += arg
+                            varargsHandledCounter++
+                        }
+                        else -> {
+                            argsHandledCounter++
+                            providedPositionalArguments[command.arguments[argsHandledCounter].name] = arg
+                            argsHandledCounter++
+                        }
+                    }
+                    argument.numberArgs == 0 -> throw IllegalArgumentException("numberArgs must not be 0")
+                    else -> {
+                        // Add with key = argument.name, value = arg
+                        providedPositionalArguments[argument.name] = arg
+                        argsHandledCounter++
+                    }
+                }
             } else {
                 return ParseResult.Error(ParseResult.Error.Code.MORE_POSITIONAL_ARGUMENTS_THAN_EXPECTED,
                         arg, "ERROR: More positional arguments provided than expected. Argument: \"$arg\"")
@@ -98,7 +135,7 @@ fun parseArgs(command: Command, args: List<String>): ParseResult {
         }
     }
 
-    return ParseResult.Parameters(providedPositionalArguments, providedOptions)
+    return ParseResult.Parameters(providedPositionalArguments, providedVarargs, providedOptions)
 }
 
 private fun enoughArgsProvided(iterator: ListIterator<String>, requiredArgs: Int): Boolean {
