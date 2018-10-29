@@ -4,6 +4,7 @@
 - Print help and the current version with the `--help` and `--version` parameter ([#2](https://github.com/dbaelz/Konclik/pull/2))
 - Define a CLI application in a `main()` function ([#4](https://github.com/dbaelz/Konclik/pull/4))
 - KDoc documentation for the DSL Builders ([#9](https://github.com/dbaelz/Konclik/pull/9))
+- Improve readme and add changelog ([#7](https://github.com/dbaelz/Konclik/pull/7))
 
 ### Changed
 - Utilization of the new multiplatform Gradle plugin ([#3](https://github.com/dbaelz/Konclik/pull/3))

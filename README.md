@@ -3,32 +3,30 @@
 
 Konclik is a library for the development of a CLI application.
 
-##### Why Konclik?
+#### Why Konclik?
 
 - Provides a simple yet useful Kotlin DSL to define the application
 - Built with Kotlin's [Multi-platform Project](https://kotlinlang.org/docs/reference/multiplatform.html) tools so you can write once and run everywhere
 - Targets Linux, Windows, MacOS, Jvm, and NodeJS
 
+#### Version
+- The newest version of Konclik is `0.6.0`
+- All changes are documented in the [CHANGELOG](CHANGELOG.md)
+
+#### Contributing
 Issues, contributions and suggestions are very welcome.
+Please report bugs, improvements and new features with an issue,
+so we can discuss the next steps.
 
 ## Project structure
 
-This project uses the [new MPP plugin](https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html), the root contains Konclik's core source in the `src` directory.
+This project uses the [new MPP plugin](https://kotlinlang.org/docs/reference/building-mpp-with-gradle.html),
+the root contains Konclik's core source in the `src` directory.
 In addition to the core, the following submodules are available.
 - `example`: An example, which demonstrates a Konclik app targeting MacOS, Linux, Windows, Jvm, and NodeJS.
 
-## Project Operation
-
-*Note: If the Host machine does not support a specific target, that target's tasks will simply be ignored.*
-
-The following gradle tasks are available:
-- Testing: `jsTest`, `macosTest`, `jvmTest`, `linuxTest`, `windowsTest`
-- `publish`: Publish to bintray, replace the publishing url with your own repository.
-- `publishToMavenLocal`: Publish a version to your local machine, available in the `mavenLocal()` repository
-- Example App: `example:runMacos`, `example:runJar`, `example:runLinux`, `example:runWindows`, `example:runNodejs`
-
 ## Setup
-Konclik is published to bintray.
+Konclik is published to bintray and can easily be integrated into an existing project.
 
 #### Repository
 
@@ -58,9 +56,25 @@ dependencies {
 }
 ```
 
+
+## Available tasks
+
+*Note: If the Host machine does not support a specific target, that target's tasks will simply be ignored.*
+
+The following Gradle tasks are available:
+- Testing: `jsTest`, `macosTest`, `jvmTest`, `linuxTest`, `windowsTest`
+- `publish`: Publish to bintray, replace the publishing url with your own repository.
+- `publishToMavenLocal`: Publish a version to your local machine, available in the `mavenLocal()` repository
+- Example App: `example:runMacos`, `example:runJar`, `example:runLinux`, `example:runWindows`, `example:runNodejs`
+
+
+
 ## Konclik DSL Example
-The current DSL is WIP, but base features are stable and provide enough
-feature to build effective CLI applications. The DSL consists of:
+This project provides an [example](example/src/commonMain/kotlin), which
+shows the usage of the DSL.
+
+The current DSL is WIP, but suitable to build effective CLI applications.
+It provides KDoc to explain the usage. A short overview of the components:
 - `konclikApp`: The CLI app
   * The app provides optional `metadata` (name, description and version)
   * A app consists of one or more `command` entries
@@ -76,8 +90,6 @@ feature to build effective CLI applications. The DSL consists of:
   * By default, parser errors are printed to standard out. With `onError` this can be changed and custom error handling is possible
   * The command prints a help page with `--help` and returns
 
-For a working example see the CLI application in the example submodule: [Example.kt](https://github.com/dbaelz/Konclik/blob/master/example/src/main/kotlin/Example.kt)
-
 
 ## License
-[Apache 2 License](https://github.com/dbaelz/OnOff-Tracker/blob/master/LICENSE)
+[Apache 2 License](LICENSE)
