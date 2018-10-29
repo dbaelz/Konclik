@@ -45,14 +45,14 @@ repositories {
 ```gradle
 dependencies {
     // With Gradle Metadata enabled, all targets can depend on
-    implementation "de.dbaelz.konclik:konclik:0.5.0"
+    implementation "de.dbaelz.konclik:konclik:0.6.0"
     
     // All artifacts are available with the -target suffix
-    implementation "de.dbaelz.konclik:konclik-macos:0.5.0"
-    implementation "de.dbaelz.konclik:konclik-linux:0.5.0"
-    implementation "de.dbaelz.konclik:konclik-windows:0.5.0"
-    implementation "de.dbaelz.konclik:konclik-jvm:0.5.0"
-    implementation "de.dbaelz.konclik:konclik-js:0.5.0"
+    implementation "de.dbaelz.konclik:konclik-macos:0.6.0"
+    implementation "de.dbaelz.konclik:konclik-linux:0.6.0"
+    implementation "de.dbaelz.konclik:konclik-windows:0.6.0"
+    implementation "de.dbaelz.konclik:konclik-jvm:0.6.0"
+    implementation "de.dbaelz.konclik:konclik-js:0.6.0"
 }
 ```
 
