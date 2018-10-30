@@ -1,9 +1,0 @@
-apply plugin: 'org.jetbrains.kotlin.platform.native'
-
-components.main {
-    targets = ['linux', 'macos']
-
-    outputKinds = [KLIBRARY]
-}
-
-bintrayUpload.dependsOn publishToMavenLocal

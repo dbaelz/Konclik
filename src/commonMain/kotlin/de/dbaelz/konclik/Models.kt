@@ -18,16 +18,19 @@ data class KonclikApp(val name: String = "",
     }
 
     private fun showVersion() {
-        println("$name; Version $version")
+        println("$name; Version ${if (version.isNotEmpty()) version else "not provided"}")
     }
 
     private fun showHelp() {
-        println("$name: $description")
+        println(name + if (description.isNotEmpty()) ": $description" else "")
         if (version.isNotEmpty()) println("Version: $version")
-        println()
-        println("Available commands:")
-        commands.forEach {
-            println("${it.name}: ${it.description}")
+
+        if (commands.isNotEmpty()) {
+            println()
+            println("Available commands:")
+            commands.forEach {
+                println("${it.name}: ${it.description}")
+            }
         }
     }
 
@@ -45,10 +48,40 @@ data class Command(val name: String,
     }
 
     fun execute(args: List<String> = emptyList()) {
+        if (args.isNotEmpty() && args.first() == "--help") {
+            showHelp()
+            return
+        }
+
         val parseResult = parseArgs(this, args)
         when (parseResult) {
             is ParseResult.Parameters -> action?.invoke(this, parseResult)
             is ParseResult.Error -> if (onError != null) onError.invoke(this, parseResult) else println(parseResult.defaultMessage)
+        }
+    }
+
+    private fun showHelp() {
+        println(name)
+        if (description.isNotEmpty()) println(description)
+
+        if (arguments.isNotEmpty()) {
+            println()
+            println("Available arguments:")
+            arguments.forEach {
+                println("\t${it.name}")
+            }
+        }
+
+        if (options.isNotEmpty()) {
+            println()
+            println("Available options:")
+            options.forEach {
+                when (it) {
+                    is Parameter.Option.Switch -> println("\tSwitch \"${it.name}\"")
+                    is Parameter.Option.Value -> println("\tValue \"${it.name}\", arguments: ${it.numberArgs}, defaults: ${it.defaults}")
+                    is Parameter.Option.Choice -> println("\tChoice \"${it.name}\", choices: ${it.choices}, default: ${it.default}")
+                }
+            }
         }
     }
 }

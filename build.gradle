@@ -1,15 +1,16 @@
 buildscript {
-    ext.kotlin_version = '1.2.70'
-    ext.kotlin_native_plugin_version = '0.9'
+    ext.kotlin_version = '1.3.0-rc-146'
     ext.bintray_plugin_version = '1.8.4'
+    ext.node_version = '8.11.4'
+    ext.qunit_version = '2.6.2'
 
     repositories {
         jcenter()
         maven {
-            url 'https://cache-redirector.jetbrains.com/maven-central'
+            url "https://plugins.gradle.org/m2/"
         }
         maven {
-            url "https://dl.bintray.com/jetbrains/kotlin-native-dependencies"
+            url 'https://cache-redirector.jetbrains.com/maven-central'
         }
         maven {
             url "http://dl.bintray.com/kotlin/kotlin-eap"
@@ -18,35 +19,120 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.kotlin:kotlin-native-gradle-plugin:$kotlin_native_plugin_version"
-        classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:$bintray_plugin_version"
+        classpath 'com.moowork.gradle:gradle-node-plugin:1.2.0'
     }
 }
 
-// Global configuration for all Konclik library submodules
-def libs = ['native', 'jvm']
-configure(allprojects.findAll { libs.contains(it.name) }) {
-    group 'de.dbaelz.konclik'
-    version '0.6.0'
+allprojects {
+    repositories {
+        mavenCentral()
+        maven {
+            url "http://dl.bintray.com/kotlin/kotlin-eap"
+        }
+    }
+}
 
-    apply plugin: 'maven-publish'
-    apply plugin: 'com.jfrog.bintray'
-    apply from: rootProject.file('publish.gradle')
+apply plugin: 'kotlin-multiplatform'
 
-    publishing {
-        publications {
-            mavenProject(MavenPublication) {
-                if (project.name == 'jvm') {
-                    from components.java
-                    artifact sourcesJar
+kotlin {
+    targets {
+        fromPreset(presets.macosX64, 'macos')
+        fromPreset(presets.linuxX64, 'linux')
+        fromPreset(presets.mingwX64, 'windows')
+        fromPreset(presets.jvm, 'jvm')
+        fromPreset(presets.js, 'js') {
+            compilations.main {
+                compileKotlinJs.kotlinOptions {
+                    sourceMap = true
+                    metaInfo = true
+                    moduleKind = 'umd'
                 }
-
-                groupId project.group
-                artifactId project.name
-                version project.version
-
-                generatePom(pom)
+                compileTestKotlinJs.kotlinOptions {
+                    moduleKind = 'commonjs'
+                }
             }
+        }
+    }
+}
+
+dependencies {
+    commonMainImplementation 'org.jetbrains.kotlin:kotlin-stdlib'
+    commonTestImplementation 'org.jetbrains.kotlin:kotlin-test-common'
+    commonTestImplementation 'org.jetbrains.kotlin:kotlin-test-annotations-common'
+
+    jvmMainImplementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk8'
+    jvmTestImplementation 'org.jetbrains.kotlin:kotlin-test'
+    jvmTestImplementation 'org.jetbrains.kotlin:kotlin-test-junit'
+
+    jsMainImplementation 'org.jetbrains.kotlin:kotlin-stdlib-js'
+    jsTestImplementation 'org.jetbrains.kotlin:kotlin-test-js'
+}
+
+// Publishing configuration
+apply plugin: 'maven-publish'
+apply from: file('publish.gradle')
+group 'de.dbaelz.konclik'
+version '0.6.0'
+
+publishing {
+    repositories {
+        maven {
+            credentials {
+                username project.hasProperty('bintrayUser') ? project.property('bintrayUser') : System.getenv('BINTRAY_USER')
+                password project.hasProperty('bintrayApiKey') ? project.property('bintrayApiKey') : System.getenv('BINTRAY_API_KEY')
+            }
+            url 'https://api.bintray.com/maven/dbaelz/Konclik/Konclik/'
+        }
+    }
+    configure(publications) {
+        generatePom(pom)
+    }
+}
+
+// Javascript test configuration
+apply plugin: 'com.moowork.node'
+
+node {
+    version = node_version
+    download = true
+    nodeModulesDir = file("$buildDir/yarn")
+}
+
+def jsCompilations = kotlin.targets.js.compilations
+task populateNodeModules {
+    doLast {
+        copy {
+            from "$buildDir/yarn/node_modules"
+            from jsCompilations.main.output.first()
+            jsCompilations.test.runtimeDependencyFiles.each {
+                if (it.exists() && !it.isDirectory()) {
+                    from zipTree(it.absolutePath).matching { include '*.js' }
+                }
+            }
+            into "$buildDir/node_modules"
+        }
+    }
+}
+
+task addYarnDeps(type: YarnTask) {
+    doFirst {
+        mkdir "$buildDir/yarn"
+    }
+    args = ["add", "qunit@$qunit_version"]
+}
+
+task runQunit(type: NodeTask, dependsOn: [jsCompilations.test.compileKotlinTaskName, addYarnDeps, populateNodeModules]) {
+    script = file("$buildDir/node_modules/qunit/bin/qunit")
+    args = [relativePath("${jsCompilations.test.output.first()}/konclik_test.js")]
+}
+
+jsTest.dependsOn runQunit
+
+// Fix for https://github.com/srs/gradle-node-plugin/issues/301
+repositories.whenObjectAdded {
+    if (it instanceof IvyArtifactRepository) {
+        metadataSources {
+            artifact()
         }
     }
 }
