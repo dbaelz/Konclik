@@ -1,4 +1,7 @@
 ## [Unreleased]
+
+
+## [0.6.0] - 2018-10-29
 ### Added
 - Use Travis CI to build and upload the artifacts ([#1](https://github.com/dbaelz/Konclik/pull/1))
 - Print help and the current version with the `--help` and `--version` parameter ([#2](https://github.com/dbaelz/Konclik/pull/2))
