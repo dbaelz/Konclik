@@ -16,7 +16,12 @@ kotlin {
         }
 
         configure([macos, linux, windows]) {
-            compilations.main.outputKinds 'executable'
+            compilations.main {
+                binaries {
+                    executable {
+                    }
+                }
+            }
         }
     }
     sourceSets {
@@ -74,7 +79,7 @@ task createJsRuntimeDir {
     dependsOn jsMainClasses, jsTestClasses
     doLast {
         copy {
-            from jsCompilations.main.output.first()
+            from jsCompilations.main.output.allOutputs
             into "$buildDir/js"
         }
         copy {
